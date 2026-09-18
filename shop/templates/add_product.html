@@ -1,0 +1,912 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Product | Backorder AI
+{% endblock %}
+
+{% block page_title %}
+Add Product
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   COLOR THEME
+   White Lilac : #F8F8F9
+   Dark Blue   : #111439
+   Blue        : #252A73
+   Soft Blue   : #E9EAF5
+========================================================= */
+
+
+/* ===============================
+   PAGE
+================================ */
+
+.add-product-page {
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 20px 10px 50px;
+}
+
+
+/* ===============================
+   MAIN CARD
+================================ */
+
+.add-product-card {
+    background: #ffffff;
+    border: 1px solid #e1e2eb;
+    border-radius: 28px;
+    padding: 42px;
+
+    box-shadow:
+        0 25px 60px rgba(17, 20, 57, 0.12),
+        0 8px 25px rgba(17, 20, 57, 0.06);
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Top gradient line */
+
+.add-product-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #111439,
+        #3f469c,
+        #111439
+    );
+
+    border-radius: 0 0 10px 10px;
+}
+
+
+/* Soft background glow */
+
+.add-product-card::after {
+    content: "";
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    top: -180px;
+    right: -100px;
+
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(63, 70, 156, 0.12),
+        transparent 70%
+    );
+
+    pointer-events: none;
+}
+
+
+/* ===============================
+   HEADER
+================================ */
+
+.product-header {
+    text-align: center;
+    margin-bottom: 38px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Main Icon */
+
+.product-main-icon {
+    width: 76px;
+    height: 76px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: linear-gradient(
+        145deg,
+        #111439,
+        #252a73
+    );
+
+    border: 1px solid #303579;
+
+    font-size: 34px;
+
+    box-shadow:
+        0 15px 35px rgba(17, 20, 57, 0.25),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+
+    transition: all 0.3s ease;
+}
+
+
+.product-main-icon:hover {
+    transform: translateY(-4px) scale(1.03);
+
+    box-shadow:
+        0 20px 40px rgba(17, 20, 57, 0.3);
+}
+
+
+/* Title */
+
+.page-title {
+    margin: 0;
+
+    font-size: 31px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+
+    color: #111439;
+}
+
+
+/* Subtitle */
+
+.page-subtitle {
+    margin: 9px 0 0;
+
+    color: #777b98;
+
+    font-size: 14px;
+}
+
+
+/* ===============================
+   FORM GRID
+================================ */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ===============================
+   SECTION TITLE
+================================ */
+
+.section-title {
+    grid-column: 1 / -1;
+
+    margin: 12px 0 2px;
+
+    padding: 0 0 13px;
+
+    border-bottom: 1px solid #e1e2eb;
+
+    color: #111439;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* Small gradient square */
+
+.section-title::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 3px;
+
+    background: linear-gradient(
+        135deg,
+        #111439,
+        #5b62b8
+    );
+
+    box-shadow:
+        0 0 10px rgba(37,42,115,0.25);
+}
+
+
+/* ===============================
+   FORM GROUP
+================================ */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+/* Full width */
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+
+/* ===============================
+   LABEL
+================================ */
+
+.form-group label {
+    margin-bottom: 9px;
+
+    color: #30345c;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* ===============================
+   INPUT / SELECT / TEXTAREA
+================================ */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    border: 1px solid #dfe1ec;
+
+    outline: none;
+
+    background: #f8f8f9;
+
+    color: #111439;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+/* Placeholder */
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+    color: #9a9db2;
+}
+
+
+/* Hover */
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+
+    border-color: #b8bbd0;
+
+    background: #ffffff;
+}
+
+
+/* Focus */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    background: #ffffff;
+
+    border-color: #3f469c;
+
+    box-shadow:
+        0 0 0 3px rgba(63,70,156,0.10);
+
+    transform: translateY(-1px);
+}
+
+
+/* Textarea */
+
+.form-group textarea {
+
+    min-height: 115px;
+
+    resize: vertical;
+}
+
+
+/* Select */
+
+.form-group select {
+    cursor: pointer;
+}
+
+
+/* Number arrows */
+
+.form-group input::-webkit-outer-spin-button,
+.form-group input::-webkit-inner-spin-button {
+
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* ===============================
+   BUTTON AREA
+================================ */
+
+.button-area {
+
+    margin-top: 35px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ===============================
+   COMMON BUTTON
+================================ */
+
+.cancel-btn,
+.add-btn {
+
+    min-height: 52px;
+
+    padding: 0 30px;
+
+    border-radius: 14px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* ===============================
+   CANCEL BUTTON
+================================ */
+
+.cancel-btn {
+
+    min-width: 150px;
+
+    color: #3d4165;
+
+    background: #f1f1f5;
+
+    border: 1px solid #dfe1ec;
+}
+
+
+.cancel-btn:hover {
+
+    color: #111439;
+
+    background: #e7e8f0;
+
+    border-color: #c9cbdc;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(17,20,57,0.08);
+}
+
+
+/* ===============================
+   ADD BUTTON
+================================ */
+
+.add-btn {
+
+    min-width: 180px;
+
+    border: 1px solid #111439;
+
+    background: linear-gradient(
+        135deg,
+        #111439,
+        #252a73,
+        #3f469c
+    );
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 28px rgba(17,20,57,0.25);
+}
+
+
+.add-btn:hover {
+
+    transform: translateY(-3px);
+
+    background: linear-gradient(
+        135deg,
+        #0c0f2e,
+        #1d225f,
+        #353b8e
+    );
+
+    box-shadow:
+        0 18px 35px rgba(17,20,57,0.32);
+}
+
+
+/* Active */
+
+.cancel-btn:active,
+.add-btn:active {
+
+    transform: translateY(0);
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 750px) {
+
+    .add-product-page {
+
+        margin: 20px auto;
+
+        padding:
+            15px
+            5px
+            40px;
+    }
+
+
+    .add-product-card {
+
+        padding: 30px 22px;
+
+        border-radius: 24px;
+    }
+
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+
+    .form-group.full {
+
+        grid-column: auto;
+    }
+
+
+    .section-title {
+
+        grid-column: 1;
+    }
+
+
+    .page-title {
+
+        font-size: 26px;
+    }
+
+
+    .page-subtitle {
+
+        font-size: 13px;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .product-main-icon {
+
+        width: 68px;
+        height: 68px;
+
+        font-size: 30px;
+
+        border-radius: 20px;
+    }
+
+
+    .add-product-card {
+
+        padding: 27px 17px;
+    }
+
+
+    .button-area {
+
+        flex-direction: column-reverse;
+
+        gap: 10px;
+    }
+
+
+    .cancel-btn,
+    .add-btn {
+
+        width: 100%;
+
+        min-width: 0;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="add-product-page">
+
+    <div class="add-product-card">
+
+        <!-- HEADER -->
+
+        <div class="product-header">
+
+            <div class="product-main-icon">
+                📦
+            </div>
+
+            <h1 class="page-title">
+                Add New Product
+            </h1>
+
+            <p class="page-subtitle">
+                Add a product to your Backorder AI inventory
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+
+                <!-- =========================
+                     PRODUCT DETAILS
+                ========================== -->
+
+                <h3 class="section-title">
+                    Product Details
+                </h3>
+
+
+                <!-- Product Name -->
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Example: Helmet"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        name="category"
+                        placeholder="Example: Safety"
+                    >
+
+                </div>
+
+
+                <!-- Price -->
+
+                <div class="form-group">
+
+                    <label>
+                        Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        name="price"
+                        step="0.01"
+                        min="0"
+                        placeholder="1200"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Stock -->
+
+                <div class="form-group">
+
+                    <label>
+                        Initial Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock"
+                        min="0"
+                        placeholder="100"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Enter product description..."
+                    ></textarea>
+
+                </div>
+
+
+                <!-- =========================
+                     PRODUCT FEATURES
+                ========================== -->
+
+                <h3 class="section-title">
+                    Product Features
+                </h3>
+
+
+                <!-- Lead Time -->
+
+                <div class="form-group">
+
+                    <label>
+                        Lead Time
+                    </label>
+
+                    <input
+                        type="number"
+                        name="lead_time"
+                        value="10"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- In Transit -->
+
+                <div class="form-group">
+
+                    <label>
+                        In Transit Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        name="in_transit_qty"
+                        value="20"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- Forecast 3 -->
+
+                <div class="form-group">
+
+                    <label>
+                        Forecast 3 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_3_month"
+                        value="50"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- Forecast 6 -->
+
+                <div class="form-group">
+
+                    <label>
+                        Forecast 6 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_6_month"
+                        value="100"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- Forecast 9 -->
+
+                <div class="form-group">
+
+                    <label>
+                        Forecast 9 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_9_month"
+                        value="150"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- Minimum Bank -->
+
+                <div class="form-group">
+
+                    <label>
+                        Minimum Bank
+                    </label>
+
+                    <input
+                        type="number"
+                        name="min_bank"
+                        value="20"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- Probability -->
+
+                <div class="form-group">
+
+                    <label>
+                        Probability
+                    </label>
+
+                    <input
+                        type="number"
+                        name="probability"
+                        value="20"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-area">
+
+                <a
+                    href="{% url 'admin_dashboard' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="add-btn"
+                >
+                    + Add Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

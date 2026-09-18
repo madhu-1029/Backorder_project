@@ -1,0 +1,1186 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Products | Backorder AI{% endblock %}
+
+{% block page_title %}Products{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   WHITE LILAC + DARK BLUE THEME
+   Background : #F8F8F9
+   Dark Blue  : #111439
+   Indigo     : #252A68
+   Soft Blue  : #5D66C8
+   Light Lilac: #EEF0FF
+   Border     : #E2E4F0
+   Muted      : #686D88
+============================================================ */
+
+
+/* ---------- PAGE WRAPPER ---------- */
+
+.products-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+
+/* ---------- HEADER ---------- */
+
+.products-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+
+/* ---------- HEADER BADGE ---------- */
+
+.products-header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    background: #EEF0FF;
+    color: #252A68;
+
+    border: 1px solid #E0E2F2;
+
+    padding: 8px 20px;
+
+    border-radius: 40px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 14px;
+
+    box-shadow:
+        0 8px 18px -12px
+        rgba(17, 20, 57, 0.20);
+}
+
+
+.products-header .badge::before {
+    content: "✦";
+    color: #5D66C8;
+}
+
+
+/* ---------- PRODUCTS TITLE ---------- */
+
+.products-title {
+    margin: 0 0 8px;
+
+    font-size: 36px;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+/* ---------- SUBTITLE ---------- */
+
+.products-subtitle {
+    margin: 0;
+
+    color: #686D88;
+
+    font-size: 15px;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   PRODUCTS GRID
+============================================================ */
+
+.products-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(250px, 1fr));
+
+    gap: 26px;
+}
+
+
+/* ============================================================
+   PRODUCT CARD
+============================================================ */
+
+.product-card {
+    position: relative;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid #E2E4F0;
+
+    border-radius: 30px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 20px 40px -20px
+        rgba(17, 20, 57, 0.22),
+
+        0 8px 16px -8px
+        rgba(37, 42, 104, 0.10),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.95);
+
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease,
+        background 0.35s ease;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/* ---------- CARD BLUE GLOW ---------- */
+
+.product-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(93, 102, 200, 0.12),
+            transparent 65%
+        );
+
+    opacity: 0;
+
+    transition: opacity 0.4s ease;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+.product-card:hover::before {
+    opacity: 1;
+}
+
+
+/* ---------- CARD HOVER ---------- */
+
+.product-card:hover {
+    transform: translateY(-8px);
+
+    background: #FFFFFF;
+
+    border-color: #D5D9F2;
+
+    box-shadow:
+        0 40px 70px -24px
+        rgba(17, 20, 57, 0.28),
+
+        0 15px 30px -12px
+        rgba(93, 102, 200, 0.16),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 1);
+}
+
+
+/* ============================================================
+   IMAGE AREA
+============================================================ */
+
+.product-image {
+    position: relative;
+
+    height: 200px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+
+    z-index: 1;
+}
+
+
+/* ---------- IMAGE GLOW ---------- */
+
+.product-image::before {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 170px;
+    height: 170px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.18),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    filter: blur(22px);
+
+    pointer-events: none;
+
+    opacity: 0.7;
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+
+.product-card:hover .product-image::before {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.15);
+}
+
+
+/* ---------- PRODUCT IMAGE ---------- */
+
+.product-image img {
+    position: relative;
+
+    z-index: 1;
+
+    width: 155px;
+
+    height: 155px;
+
+    object-fit: contain;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 20px 30px
+            rgba(17, 20, 57, 0.18)
+        );
+
+    transition:
+        transform 0.5s
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.product-card:hover .product-image img {
+    transform:
+        scale(1.12)
+        rotate(-3deg);
+}
+
+
+/* ---------- FALLBACK ICON ---------- */
+
+.product-icon {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 78px;
+
+    filter:
+        drop-shadow(
+            0 20px 30px
+            rgba(17, 20, 57, 0.18)
+        );
+
+    transition:
+        transform 0.5s
+        cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.product-card:hover .product-icon {
+    transform:
+        scale(1.12)
+        rotate(-3deg);
+}
+
+
+/* ============================================================
+   CATEGORY BADGE
+============================================================ */
+
+.product-category {
+    position: absolute;
+
+    top: 20px;
+    left: 20px;
+
+    z-index: 3;
+
+    color: #252A68;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EEF0FF,
+            #E5E8FF
+        );
+
+    border: 1px solid #DCE0F5;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+
+    text-transform: uppercase;
+
+    padding: 6px 13px;
+
+    border-radius: 30px;
+
+    box-shadow:
+        0 8px 16px -8px
+        rgba(17, 20, 57, 0.18);
+}
+
+
+/* ============================================================
+   WISHLIST HEART
+============================================================ */
+
+.product-heart {
+    position: absolute;
+
+    top: 20px;
+    right: 20px;
+
+    z-index: 3;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E0E2F0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+
+    color: #686D88;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 16px -8px
+        rgba(17, 20, 57, 0.20);
+
+    transition: all 0.25s ease;
+}
+
+
+.product-heart:hover {
+    color: #5D66C8;
+
+    background: #EEF0FF;
+
+    border-color: #C8CDF0;
+
+    transform: scale(1.15);
+
+    box-shadow:
+        0 12px 24px -8px
+        rgba(93, 102, 200, 0.25);
+}
+
+
+/* ============================================================
+   PRODUCT INFO
+============================================================ */
+
+.product-name {
+    font-size: 18px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    margin: 0 0 6px;
+
+    letter-spacing: -0.3px;
+
+    line-height: 1.3;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ---------- DESCRIPTION ---------- */
+
+.product-description {
+    color: #686D88;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin: 0 0 16px;
+
+    min-height: 42px;
+
+    font-weight: 500;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ============================================================
+   PRICE + STOCK ROW
+============================================================ */
+
+.product-meta {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ---------- PRICE ---------- */
+
+.product-price {
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+
+    line-height: 1;
+}
+
+
+/* ============================================================
+   STOCK PILL
+============================================================ */
+
+.stock {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    padding: 6px 11px;
+
+    border-radius: 30px;
+
+    white-space: nowrap;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.8);
+}
+
+
+.stock::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* ---------- IN STOCK ---------- */
+
+.stock-in {
+    color: #21864B;
+
+    background: #EAF8F0;
+
+    border: 1px solid #D4EBDD;
+}
+
+
+/* ---------- LOW STOCK ---------- */
+
+.stock-low {
+    color: #C57B1C;
+
+    background: #FFF6E8;
+
+    border: 1px solid #F1E0C2;
+}
+
+
+/* ---------- OUT OF STOCK ---------- */
+
+.stock-out {
+    color: #C23B3B;
+
+    background: #FFF0F0;
+
+    border: 1px solid #F1DADA;
+}
+
+
+/* ============================================================
+   VIEW PRODUCT BUTTON
+============================================================ */
+
+.view-btn {
+    margin-top: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    padding: 13px;
+
+    border-radius: 16px;
+
+    font-weight: 800;
+
+    font-size: 13px;
+
+    letter-spacing: 0.3px;
+
+    box-shadow:
+        0 14px 28px -12px
+        rgba(17, 20, 57, 0.35);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        letter-spacing 0.25s ease;
+
+    overflow: hidden;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ---------- BUTTON SHINE ---------- */
+
+.view-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: -100%;
+
+    width: 100%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent
+        );
+
+    transition: left 0.6s ease;
+}
+
+
+.view-btn:hover::before {
+    left: 100%;
+}
+
+
+/* ---------- ARROW ---------- */
+
+.view-btn::after {
+    content: "→";
+
+    font-size: 15px;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+/* ---------- BUTTON HOVER ---------- */
+
+.view-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 22px 40px -12px
+        rgba(17, 20, 57, 0.40),
+
+        0 8px 20px -8px
+        rgba(93, 102, 200, 0.30);
+
+    letter-spacing: 0.6px;
+}
+
+
+.view-btn:hover::after {
+    transform: translateX(4px);
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.no-products {
+    text-align: center;
+
+    padding: 80px 25px;
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    backdrop-filter: blur(16px);
+
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid #E2E4F0;
+
+    border-radius: 32px;
+
+    box-shadow:
+        0 30px 60px -24px
+        rgba(17, 20, 57, 0.20),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.95);
+}
+
+
+/* ---------- EMPTY ICON ---------- */
+
+.no-products .empty-icon {
+    width: 100px;
+
+    height: 100px;
+
+    margin: 0 auto 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #EEF0FF,
+            #E2E5FB
+        );
+
+    border: 1px solid #DDE1F4;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 46px;
+
+    box-shadow:
+        0 18px 36px -14px
+        rgba(17, 20, 57, 0.20);
+
+    animation:
+        floatIcon 3s ease-in-out infinite;
+}
+
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+}
+
+
+/* ---------- EMPTY TITLE ---------- */
+
+.no-products h2 {
+    margin: 0 0 8px;
+
+    color: #111439;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* ---------- EMPTY TEXT ---------- */
+
+.no-products p {
+    margin: 0;
+
+    color: #686D88;
+
+    font-size: 15px;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .products-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 20px;
+    }
+
+    .product-image {
+        height: 175px;
+    }
+
+    .product-image img {
+        width: 130px;
+
+        height: 130px;
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .products-title {
+        font-size: 28px;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .product-card {
+        padding: 18px;
+
+        border-radius: 26px;
+    }
+
+    .product-image {
+        height: 185px;
+    }
+
+    .product-image img {
+        width: 135px;
+
+        height: 135px;
+    }
+
+    .product-icon {
+        font-size: 66px;
+    }
+
+    .product-category {
+        top: 18px;
+
+        left: 18px;
+    }
+
+    .product-heart {
+        top: 18px;
+
+        right: 18px;
+    }
+
+    .product-name {
+        font-size: 17px;
+    }
+
+    .product-price {
+        font-size: 21px;
+    }
+
+}
+
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="products-page">
+
+
+    <!-- ---------- HEADER ---------- -->
+
+    <div class="products-header">
+
+        <div class="badge">
+            Explore Catalog
+        </div>
+
+        <h1 class="products-title">
+            Our Products
+        </h1>
+
+        <p class="products-subtitle">
+            Choose a product and check its backorder prediction.
+        </p>
+
+    </div>
+
+
+    {% if products %}
+
+    <!-- ---------- PRODUCTS GRID ---------- -->
+
+    <div class="products-grid">
+
+        {% for product in products %}
+
+        <div class="product-card">
+
+
+            <!-- ---------- CATEGORY ---------- -->
+
+            <div class="product-category">
+                {{ product.category }}
+            </div>
+
+
+            <!-- ---------- WISHLIST ---------- -->
+
+            <div class="product-heart">
+                ♡
+            </div>
+
+
+            <!-- ---------- IMAGE ---------- -->
+
+            <div class="product-image">
+
+                {% if product.name == "Toy" %}
+
+                    <img
+                        src="{% static 'images/toy.png' %}"
+                        alt="Toy"
+                    >
+
+                {% elif product.name == "Helmet" %}
+
+                    <img
+                        src="{% static 'images/helmet.png' %}"
+                        alt="Helmet"
+                    >
+
+                {% elif product.name == "Backpack" %}
+
+                    <img
+                        src="{% static 'images/bag.png' %}"
+                        alt="Backpack"
+                    >
+
+                {% elif product.name == "Water Bottle" %}
+
+                    <img
+                        src="{% static 'images/bottle.png' %}"
+                        alt="Water Bottle"
+                    >
+
+                {% elif product.name == "Smartphone" %}
+
+                    <img
+                        src="{% static 'images/phone.png' %}"
+                        alt="Smartphone"
+                    >
+
+                {% elif product.name == "Smart Watch" %}
+
+                    <img
+                        src="{% static 'images/watch.png' %}"
+                        alt="Smart Watch"
+                    >
+
+                {% elif product.name == "Perfume" %}
+
+                    <img
+                        src="{% static 'images/perfume.png' %}"
+                        alt="Perfume"
+                    >
+
+                {% elif product.name == "Headphones" %}
+
+                    <img
+                        src="{% static 'images/headphones.png' %}"
+                        alt="Headphones"
+                    >
+
+                {% elif product.name == "perfume" %}
+
+                    <img
+                        src="{% static 'images/perfume.png' %}"
+                        alt="perfume"
+                    >
+
+                {% elif product.name == "Laptop" %}
+
+                    <img
+                        src="{% static 'images/laptop.png' %}"
+                        alt="Laptop"
+                    >
+
+                {% elif product.name == "Cricket Bat" %}
+
+                    <img
+                        src="{% static 'images/cricket_bat.png' %}"
+                        alt="Cricket Bat"
+                    >
+
+                {% elif product.name == "Wallet" %}
+
+                    <img
+                        src="{% static 'images/wallet.png' %}"
+                        alt="Wallet"
+                    >
+
+                {% elif product.name == "Football" %}
+
+                    <img
+                        src="{% static 'images/football.png' %}"
+                        alt="Football"
+                    >
+
+                {% else %}
+
+                    <div class="product-icon">
+                        🛍️
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ---------- PRODUCT NAME ---------- -->
+
+            <h2 class="product-name">
+                {{ product.name }}
+            </h2>
+
+
+            <!-- ---------- DESCRIPTION ---------- -->
+
+            <p class="product-description">
+                {{ product.description }}
+            </p>
+
+
+            <!-- ---------- PRICE + STOCK ---------- -->
+
+            <div class="product-meta">
+
+
+                <!-- PRICE -->
+
+                <div class="product-price">
+                    ₹{{ product.price }}
+                </div>
+
+
+                <!-- STOCK -->
+
+                {% if product.stock <= 0 %}
+
+                    <div class="stock stock-out">
+                        Out of Stock
+                    </div>
+
+                {% elif product.stock < 20 %}
+
+                    <div class="stock stock-low">
+                        {{ product.stock }} left
+                    </div>
+
+                {% else %}
+
+                    <div class="stock stock-in">
+                        {{ product.stock }} in stock
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ---------- VIEW PRODUCT ---------- -->
+
+            <a
+                href="{% url 'product_detail' product.id %}"
+                class="view-btn"
+            >
+                View Product
+            </a>
+
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ---------- EMPTY STATE ---------- -->
+
+    <div class="no-products">
+
+        <div class="empty-icon">
+            📦
+        </div>
+
+        <h2>
+            No Products Available
+        </h2>
+
+        <p>
+            Please add products to the database.
+        </p>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

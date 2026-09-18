@@ -1,0 +1,1592 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Backorder AI{% endblock %}
+    </title>
+
+
+    <style>
+
+        /* ============================================================
+           WHITE LILAC + DARK BLUE THEME
+           
+           Main Background : #F8F8F9
+           Dark Blue        : #111439
+           Deep Blue        : #181C52
+           Indigo           : #303779
+           Lilac            : #777DD6
+           Soft Lilac       : #E9E9F5
+           Border           : #E1E2EE
+           White            : #FFFFFF
+        ============================================================ */
+
+
+        /* ============================================================
+           RESET
+        ============================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        /* ============================================================
+           BODY
+        ============================================================ */
+
+        body {
+
+            font-family:
+                'Inter',
+                'Segoe UI',
+                system-ui,
+                sans-serif;
+
+            background:
+
+                radial-gradient(
+                    circle at 5% 5%,
+                    rgba(119, 125, 214, 0.12),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 95% 90%,
+                    rgba(48, 55, 121, 0.08),
+                    transparent 32%
+                ),
+
+                #F8F8F9;
+
+            background-attachment: fixed;
+
+            color: #111439;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            line-height: 1.5;
+
+            position: relative;
+        }
+
+
+        /* ============================================================
+           SUBTLE BACKGROUND PATTERN
+        ============================================================ */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            background-image:
+
+                radial-gradient(
+                    rgba(17, 20, 57, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 24px 24px;
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+
+        /* ============================================================
+           FLOATING SIDEBAR
+        ============================================================ */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 22px;
+
+            left: 22px;
+
+            bottom: 22px;
+
+            width: 78px;
+
+            background:
+
+                rgba(255, 255, 255, 0.94);
+
+            backdrop-filter: blur(24px);
+
+            -webkit-backdrop-filter: blur(24px);
+
+            border:
+
+                1px solid rgba(17, 20, 57, 0.08);
+
+            border-radius: 32px;
+
+            box-shadow:
+
+                0 24px 60px -20px
+                rgba(17, 20, 57, 0.18),
+
+                0 8px 24px -10px
+                rgba(17, 20, 57, 0.10),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.9);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            padding: 22px 0;
+
+            z-index: 1100;
+
+            transition:
+
+                width 0.35s
+                cubic-bezier(0.22, 1, 0.36, 1),
+
+                box-shadow 0.35s ease,
+
+                background 0.35s ease;
+        }
+
+
+        .sidebar:hover {
+
+            width: 236px;
+
+            align-items: flex-start;
+
+            padding: 22px 14px;
+
+            background: #FFFFFF;
+
+            box-shadow:
+
+                0 40px 80px -25px
+                rgba(17, 20, 57, 0.22),
+
+                0 12px 32px -12px
+                rgba(119, 125, 214, 0.14);
+        }
+
+
+        /* ============================================================
+           LOGO
+        ============================================================ */
+
+        .logo-mark {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none;
+
+            margin-bottom: 32px;
+
+            padding-left: 9px;
+
+            width: 100%;
+
+            position: relative;
+        }
+
+
+        .logo-icon {
+
+            width: 44px;
+
+            height: 44px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #111439 0%,
+                    #252A68 50%,
+                    #777DD6 100%
+                );
+
+            border-radius: 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #FFFFFF;
+
+            font-weight: 800;
+
+            font-size: 21px;
+
+            box-shadow:
+
+                0 12px 24px -8px
+                rgba(17, 20, 57, 0.35),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.25);
+
+            flex-shrink: 0;
+
+            position: relative;
+
+            transition:
+                transform 0.3s ease;
+        }
+
+
+        .logo-icon::after {
+
+            content: "";
+
+            position: absolute;
+
+            inset: -5px;
+
+            border-radius: 20px;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(119, 125, 214, 0.25),
+                    transparent 70%
+                );
+
+            z-index: -1;
+
+            opacity: 0;
+
+            transition:
+                opacity 0.3s ease;
+        }
+
+
+        .sidebar:hover .logo-icon::after {
+
+            opacity: 1;
+        }
+
+
+        .sidebar:hover .logo-icon {
+
+            transform:
+                rotate(-6deg)
+                scale(1.05);
+        }
+
+
+        /* ============================================================
+           LOGO TEXT
+        ============================================================ */
+
+        .logo-text {
+
+            font-weight: 800;
+
+            font-size: 18px;
+
+            letter-spacing: -0.4px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #111439,
+                    #303779 60%,
+                    #777DD6
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+
+            opacity: 0;
+
+            white-space: nowrap;
+
+            transform:
+                translateX(-8px);
+
+            transition:
+
+                opacity 0.25s ease,
+
+                transform 0.25s ease;
+        }
+
+
+        .sidebar:hover .logo-text {
+
+            opacity: 1;
+
+            transform:
+                translateX(0);
+        }
+
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+
+        .nav-icon-links {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+            width: 100%;
+
+            flex: 1;
+        }
+
+
+        .nav-icon-links a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding: 11px 14px;
+
+            border-radius: 18px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            font-size: 15px;
+
+            color: #62657F;
+
+            transition:
+
+                all 0.25s
+                cubic-bezier(0.22, 1, 0.36, 1);
+
+            white-space: nowrap;
+
+            width: 100%;
+
+            position: relative;
+        }
+
+
+        .nav-icon-links a .nav-emoji {
+
+            font-size: 21px;
+
+            line-height: 1;
+
+            width: 26px;
+
+            text-align: center;
+
+            flex-shrink: 0;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+
+        .nav-icon-links a .nav-label {
+
+            opacity: 0;
+
+            transform:
+                translateX(-6px);
+
+            transition:
+
+                opacity 0.25s ease,
+
+                transform 0.25s ease;
+        }
+
+
+        .sidebar:hover
+        .nav-icon-links a
+        .nav-label {
+
+            opacity: 1;
+
+            transform:
+                translateX(0);
+        }
+
+
+        /* ============================================================
+           NAV HOVER
+        ============================================================ */
+
+        .nav-icon-links a:hover {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #F0F0F9,
+                    #E8E9F7
+                );
+
+            color: #111439;
+
+            transform:
+                translateX(2px);
+        }
+
+
+        .nav-icon-links a:hover
+        .nav-emoji {
+
+            transform:
+                scale(1.18)
+                rotate(-5deg);
+        }
+
+
+        /* ============================================================
+           ACTIVE NAV
+        ============================================================ */
+
+        .nav-icon-links a.active {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #111439 0%,
+                    #252A68 55%,
+                    #4D55A2 100%
+                );
+
+            color: #FFFFFF;
+
+            box-shadow:
+
+                0 10px 24px -10px
+                rgba(17, 20, 57, 0.40),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.18);
+        }
+
+
+        .nav-icon-links a.active::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -22px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            width: 4px;
+
+            height: 60%;
+
+            background:
+
+                linear-gradient(
+                    180deg,
+                    #777DD6,
+                    #A7AAEC
+                );
+
+            border-radius:
+                0 4px 4px 0;
+
+            box-shadow:
+
+                0 0 12px
+                rgba(119, 125, 214, 0.45);
+        }
+
+
+        /* ============================================================
+           LOGOUT
+        ============================================================ */
+
+        .logout-icon-link {
+
+            margin-top: auto;
+
+            color: #C94F5D !important;
+        }
+
+
+        .logout-icon-link:hover {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #FFF0F1,
+                    #FFE5E7
+                ) !important;
+
+            color: #B73545 !important;
+
+            box-shadow:
+
+                0 10px 24px -12px
+                rgba(201, 79, 93, 0.25);
+        }
+
+
+        /* ============================================================
+           MAIN CONTENT
+        ============================================================ */
+
+        .main-wrapper {
+
+            margin-left: 122px;
+
+            padding:
+                22px 30px 22px 14px;
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+
+            transition:
+                margin-left 0.35s ease;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* ============================================================
+           TOP BAR
+        ============================================================ */
+
+        .top-bar {
+
+            background:
+
+                rgba(255, 255, 255, 0.94);
+
+            backdrop-filter: blur(20px);
+
+            -webkit-backdrop-filter: blur(20px);
+
+            border:
+
+                1px solid
+                rgba(17, 20, 57, 0.07);
+
+            border-radius: 28px;
+
+            padding:
+                16px 26px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            box-shadow:
+
+                0 16px 40px -20px
+                rgba(17, 20, 57, 0.15),
+
+                0 6px 16px -8px
+                rgba(17, 20, 57, 0.08),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.95);
+
+            margin-bottom: 26px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .top-bar::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: -70px;
+
+            right: -70px;
+
+            width: 190px;
+
+            height: 190px;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    rgba(119, 125, 214, 0.13),
+                    transparent 70%
+                );
+
+            border-radius: 50%;
+
+            pointer-events: none;
+        }
+
+
+        /* ============================================================
+           PAGE TITLE
+        ============================================================ */
+
+        .page-title-wrap {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 2px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        .page-title {
+
+            font-weight: 800;
+
+            font-size: 22px;
+
+            letter-spacing: -0.4px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #111439,
+                    #303779 65%,
+                    #777DD6
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+
+            line-height: 1.2;
+        }
+
+
+        .page-subtitle {
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: #85889F;
+
+            letter-spacing: 0.3px;
+        }
+
+
+        /* ============================================================
+           USER BADGE
+        ============================================================ */
+
+        .user-badge {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #F3F3FA,
+                    #E9EAF6
+                );
+
+            padding:
+                6px 18px 6px 8px;
+
+            border:
+                1px solid #E1E2EE;
+
+            border-radius: 40px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #111439;
+
+            box-shadow:
+
+                0 10px 24px -10px
+                rgba(17, 20, 57, 0.12);
+
+            position: relative;
+
+            z-index: 1;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+
+        .user-badge:hover {
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        .user-avatar {
+
+            width: 36px;
+
+            height: 36px;
+
+            background:
+
+                linear-gradient(
+                    145deg,
+                    #111439,
+                    #777DD6
+                );
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #FFFFFF;
+
+            font-weight: 800;
+
+            font-size: 15px;
+
+            box-shadow:
+
+                0 8px 18px -6px
+                rgba(17, 20, 57, 0.35),
+
+                inset 0 1px 0
+                rgba(255, 255, 255, 0.3);
+
+            flex-shrink: 0;
+        }
+
+
+        /* ============================================================
+           MESSAGES
+        ============================================================ */
+
+        .messages-container {
+
+            max-width: 1100px;
+
+            margin:
+                0 auto 20px;
+
+            width: 100%;
+        }
+
+
+        .message {
+
+            padding:
+                14px 22px;
+
+            border-radius: 20px;
+
+            margin-bottom: 10px;
+
+            font-size: 14px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #FFFFFF,
+                    #F1F1F9
+                );
+
+            backdrop-filter:
+                blur(12px);
+
+            color: #303354;
+
+            border:
+                1px solid #E2E3EF;
+
+            box-shadow:
+
+                0 12px 28px -14px
+                rgba(17, 20, 57, 0.16),
+
+                0 4px 12px -6px
+                rgba(17, 20, 57, 0.08);
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .message::before {
+
+            content: "✨";
+
+            font-size: 18px;
+
+            flex-shrink: 0;
+        }
+
+
+        /* ============================================================
+           MAIN
+        ============================================================ */
+
+        main {
+
+            flex: 1;
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+
+        .footer {
+
+            margin-top: 40px;
+
+            padding:
+                22px 28px;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #FFFFFF,
+                    #F1F1F8
+                );
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
+            border:
+                1px solid #E1E2EE;
+
+            border-radius: 24px;
+
+            color: #85889F;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            text-align: center;
+
+            letter-spacing: 0.3px;
+
+            box-shadow:
+
+                0 16px 36px -20px
+                rgba(17, 20, 57, 0.15),
+
+                0 6px 16px -8px
+                rgba(17, 20, 57, 0.07);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .footer::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            width: 80px;
+
+            height: 3px;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    #111439,
+                    #777DD6,
+                    transparent
+                );
+
+            border-radius: 2px;
+        }
+
+
+        .footer span {
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    #111439,
+                    #303779,
+                    #777DD6
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            background-clip: text;
+
+            font-weight: 800;
+        }
+
+
+        /* ============================================================
+           RESPONSIVE - TABLET
+        ============================================================ */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+
+                width: 70px;
+
+                top: 16px;
+
+                left: 16px;
+
+                bottom: 16px;
+
+                border-radius: 28px;
+            }
+
+
+            .sidebar:hover {
+
+                width: 216px;
+            }
+
+
+            .main-wrapper {
+
+                margin-left: 102px;
+
+                padding:
+                    16px 16px 16px 8px;
+            }
+
+
+            .top-bar {
+
+                padding:
+                    14px 20px;
+
+                border-radius: 24px;
+            }
+
+
+            .page-title {
+
+                font-size: 18px;
+            }
+        }
+
+
+        /* ============================================================
+           RESPONSIVE - MOBILE
+        ============================================================ */
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+
+                width: 62px;
+
+                top: 12px;
+
+                left: 12px;
+
+                bottom: 12px;
+
+                border-radius: 24px;
+
+                padding:
+                    14px 0;
+            }
+
+
+            .sidebar:hover {
+
+                width: 200px;
+
+                padding:
+                    14px 12px;
+            }
+
+
+            .logo-icon {
+
+                width: 36px;
+
+                height: 36px;
+
+                font-size: 18px;
+
+                border-radius: 13px;
+            }
+
+
+            .logo-mark {
+
+                padding-left: 7px;
+
+                margin-bottom: 22px;
+            }
+
+
+            .nav-icon-links a {
+
+                padding:
+                    10px 10px;
+
+                gap: 10px;
+
+                font-size: 14px;
+
+                border-radius: 14px;
+            }
+
+
+            .nav-icon-links a .nav-emoji {
+
+                font-size: 19px;
+
+                width: 22px;
+            }
+
+
+            .nav-icon-links a.active::before {
+
+                left: -14px;
+            }
+
+
+            .main-wrapper {
+
+                margin-left: 86px;
+
+                padding:
+                    12px 8px 12px 4px;
+            }
+
+
+            .top-bar {
+
+                padding:
+                    12px 16px;
+
+                border-radius: 20px;
+
+                flex-wrap: wrap;
+
+                gap: 10px;
+            }
+
+
+            .page-title {
+
+                font-size: 16px;
+            }
+
+
+            .page-subtitle {
+
+                font-size: 11px;
+            }
+
+
+            .user-badge {
+
+                padding:
+                    5px 12px 5px 6px;
+
+                font-size: 12px;
+            }
+
+
+            .user-avatar {
+
+                width: 30px;
+
+                height: 30px;
+
+                font-size: 13px;
+
+                border-radius: 10px;
+            }
+
+
+            .footer {
+
+                padding:
+                    16px 18px;
+
+                font-size: 12px;
+
+                border-radius: 20px;
+            }
+        }
+
+    </style>
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body>
+
+
+    <!-- ============================================================
+         FLOATING SIDEBAR
+    ============================================================ -->
+
+    <aside class="sidebar">
+
+
+        <!-- LOGO -->
+
+        <a href="
+            {% if user.is_authenticated and user.is_staff %}
+                {% url 'admin_dashboard' %}
+            {% else %}
+                {% url 'home' %}
+            {% endif %}
+        "
+           class="logo-mark">
+
+            <div class="logo-icon">
+                B
+            </div>
+
+            <span class="logo-text">
+                Backorder AI
+            </span>
+
+        </a>
+
+
+        <!-- ========================================================
+             NAVIGATION
+        ======================================================== -->
+
+        <div class="nav-icon-links">
+
+
+            <!-- ====================================================
+                 ADMIN NAVIGATION
+            ==================================================== -->
+
+            {% if user.is_authenticated and user.is_staff %}
+
+
+                <!-- DASHBOARD -->
+
+                <a href="{% url 'admin_dashboard' %}"
+                   class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        📊
+                    </span>
+
+                    <span class="nav-label">
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- ADD STOCK -->
+
+                <a href="{% url 'add_stock_page' %}"
+                   class="{% if request.resolver_match.url_name == 'add_stock_page' or request.resolver_match.url_name == 'add_stock' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        📦
+                    </span>
+
+                    <span class="nav-label">
+                        Add Stock
+                    </span>
+
+                </a>
+
+
+                <!-- ADD PRODUCT -->
+
+                <a href="{% url 'add_product' %}"
+                   class="{% if request.resolver_match.url_name == 'add_product' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        ✨
+                    </span>
+
+                    <span class="nav-label">
+                        Add Product
+                    </span>
+
+                </a>
+
+
+                <!-- LOGOUT -->
+
+                <a href="{% url 'logout' %}"
+                   class="logout-icon-link">
+
+                    <span class="nav-emoji">
+                        🚪
+                    </span>
+
+                    <span class="nav-label">
+                        Logout
+                    </span>
+
+                </a>
+
+
+            <!-- ====================================================
+                 NORMAL USER NAVIGATION
+            ==================================================== -->
+
+            {% elif user.is_authenticated %}
+
+
+                <!-- HOME -->
+
+                <a href="{% url 'home' %}"
+                   class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        🏠
+                    </span>
+
+                    <span class="nav-label">
+                        Home
+                    </span>
+
+                </a>
+
+
+                <!-- PRODUCTS -->
+
+                <a href="{% url 'products' %}"
+                   class="{% if request.resolver_match.url_name == 'products' or request.resolver_match.url_name == 'product_detail' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        🛍️
+                    </span>
+
+                    <span class="nav-label">
+                        Products
+                    </span>
+
+                </a>
+
+
+                <!-- CART -->
+
+                <a href="{% url 'cart' %}"
+                   class="{% if request.resolver_match.url_name == 'cart' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        🛒
+                    </span>
+
+                    <span class="nav-label">
+                        Cart
+                    </span>
+
+                </a>
+
+
+                <!-- ORDERS -->
+
+                <a href="{% url 'orders' %}"
+                   class="{% if request.resolver_match.url_name == 'orders' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        📋
+                    </span>
+
+                    <span class="nav-label">
+                        Orders
+                    </span>
+
+                </a>
+
+
+                <!-- LOGOUT -->
+
+                <a href="{% url 'logout' %}"
+                   class="logout-icon-link">
+
+                    <span class="nav-emoji">
+                        🚪
+                    </span>
+
+                    <span class="nav-label">
+                        Logout
+                    </span>
+
+                </a>
+
+
+            <!-- ====================================================
+                 GUEST NAVIGATION
+            ==================================================== -->
+
+            {% else %}
+
+
+                <!-- LOGIN -->
+
+                <a href="{% url 'login' %}"
+                   class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        🔐
+                    </span>
+
+                    <span class="nav-label">
+                        Login
+                    </span>
+
+                </a>
+
+
+                <!-- REGISTER -->
+
+                <a href="{% url 'register' %}"
+                   class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}">
+
+                    <span class="nav-emoji">
+                        📝
+                    </span>
+
+                    <span class="nav-label">
+                        Register
+                    </span>
+
+                </a>
+
+
+            {% endif %}
+
+        </div>
+
+    </aside>
+
+
+    <!-- ============================================================
+         MAIN CONTENT WRAPPER
+    ============================================================ -->
+
+    <div class="main-wrapper">
+
+
+        <!-- ========================================================
+             TOP BAR
+        ======================================================== -->
+
+        <div class="top-bar">
+
+
+            <div class="page-title-wrap">
+
+                <div class="page-title">
+
+                    {% block page_title %}
+                        Backorder AI
+                    {% endblock %}
+
+                </div>
+
+
+                <div class="page-subtitle">
+
+                    Inventory Intelligence Platform
+
+                </div>
+
+            </div>
+
+
+            <!-- USER -->
+
+            {% if user.is_authenticated %}
+
+                <div class="user-badge">
+
+                    <div class="user-avatar">
+
+                        {{ user.username|first|upper }}
+
+                    </div>
+
+                    <span>
+
+                        {{ user.username }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ========================================================
+             MESSAGES
+        ======================================================== -->
+
+        {% if messages %}
+
+            <div class="messages-container">
+
+                {% for message in messages %}
+
+                    <div class="message">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ========================================================
+             MAIN CONTENT
+        ======================================================== -->
+
+        <main>
+
+            {% block content %}
+
+            {% endblock %}
+
+        </main>
+
+
+        <!-- ========================================================
+             FOOTER
+        ======================================================== -->
+
+        <footer class="footer">
+
+            <span>
+                Backorder AI
+            </span>
+
+            © 2026
+            &nbsp;·&nbsp;
+            Backorder Prediction System
+
+        </footer>
+
+
+    </div>
+
+
+</body>
+
+</html>

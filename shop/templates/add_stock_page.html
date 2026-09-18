@@ -1,0 +1,765 @@
+{% extends "base.html" %}
+
+{% block title %}Add Stock | Backorder AI{% endblock %}
+
+{% block page_title %}Add Stock{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.stock-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 35px 20px 50px;
+    color: #111439;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.stock-header {
+    text-align: center;
+    margin-bottom: 45px;
+    position: relative;
+}
+
+.stock-header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    background: linear-gradient(
+        135deg,
+        #111439,
+        #292f78,
+        #6269c9
+    );
+
+    color: #ffffff;
+
+    padding: 9px 19px;
+    border-radius: 50px;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    margin-bottom: 18px;
+
+    border: 1px solid rgba(255,255,255,0.5);
+
+    box-shadow:
+        0 10px 25px rgba(17, 20, 57, 0.20);
+}
+
+.stock-header .badge::before {
+    content: "✦";
+    color: #ffffff;
+    font-size: 12px;
+}
+
+
+.stock-header h1 {
+    font-size: 40px;
+    font-weight: 850;
+
+    margin: 0 0 10px;
+
+    letter-spacing: -1.5px;
+
+    color: #111439;
+}
+
+
+.stock-header p {
+    color: #686b82;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    margin: 0;
+}
+
+
+/* =========================================================
+   PRODUCTS GRID
+========================================================= */
+
+.products-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(320px, 1fr));
+
+    gap: 22px;
+}
+
+
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+.product-card {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8f8f9
+        );
+
+    border: 1px solid #e3e4ee;
+
+    border-radius: 22px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 12px 30px rgba(17, 20, 57, 0.08);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   CARD DECORATIVE GLOW
+========================================================= */
+
+.product-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -80px;
+    right: -80px;
+
+    width: 190px;
+    height: 190px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(98, 105, 201, 0.16),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    transition:
+        transform 0.4s ease;
+}
+
+
+/* Bottom decorative gradient */
+
+.product-card::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #111439,
+            #414a9c,
+            #747bdd
+        );
+
+    transform: scaleX(0);
+
+    transform-origin: left;
+
+    transition:
+        transform 0.35s ease;
+}
+
+
+.product-card:hover {
+    transform: translateY(-6px);
+
+    border-color: #cdd0e5;
+
+    box-shadow:
+        0 22px 45px rgba(17, 20, 57, 0.15);
+}
+
+
+.product-card:hover::before {
+    transform: scale(1.4);
+}
+
+
+.product-card:hover::after {
+    transform: scaleX(1);
+}
+
+
+/* =========================================================
+   PRODUCT INFO
+========================================================= */
+
+.product-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    position: relative;
+
+    z-index: 1;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   PRODUCT ICON
+========================================================= */
+
+.product-icon {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111439,
+            #363d8b,
+            #666ed0
+        );
+
+    border: 1px solid rgba(17,20,57,0.15);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 29px;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,0.25),
+        0 10px 20px rgba(17,20,57,0.18);
+
+    transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+}
+
+
+.product-card:hover .product-icon {
+    transform:
+        scale(1.08)
+        rotate(-3deg);
+
+    background:
+        linear-gradient(
+            145deg,
+            #252b6d,
+            #5059b0,
+            #747bdd
+        );
+}
+
+
+/* =========================================================
+   PRODUCT TEXT
+========================================================= */
+
+.product-meta {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.product-meta h3 {
+    margin: 0 0 7px;
+
+    font-size: 17px;
+
+    font-weight: 750;
+
+    color: #111439;
+
+    letter-spacing: -0.2px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   STOCK TEXT
+========================================================= */
+
+.stock-text {
+    font-size: 12px;
+
+    color: #777a91;
+
+    font-weight: 550;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+.stock-number {
+    font-weight: 800;
+
+    color: #111439;
+
+    font-size: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0f1f8,
+            #e5e6f2
+        );
+
+    padding: 3px 11px;
+
+    border-radius: 20px;
+
+    border: 1px solid #d9dbea;
+
+    display: inline-block;
+
+    min-width: 30px;
+
+    text-align: center;
+
+    box-shadow:
+        0 3px 8px rgba(17,20,57,0.06);
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.add-btn {
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #292f78,
+            #555eb7
+        );
+
+    color: #ffffff;
+
+    padding: 11px 20px;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    box-shadow:
+        0 8px 20px rgba(17,20,57,0.22);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+
+    position: relative;
+
+    z-index: 1;
+
+    flex-shrink: 0;
+}
+
+
+.add-btn::before {
+    content: "+";
+
+    font-size: 17px;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.add-btn:hover {
+    transform: translateY(-3px);
+
+    background:
+        linear-gradient(
+            135deg,
+            #252b6d,
+            #444da2,
+            #7078d8
+        );
+
+    box-shadow:
+        0 14px 28px rgba(17,20,57,0.28);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-box {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8f8f9
+        );
+
+    border: 1px dashed #cdd0e2;
+
+    padding: 70px 40px;
+
+    text-align: center;
+
+    border-radius: 25px;
+
+    color: #777a91;
+
+    box-shadow:
+        0 15px 40px rgba(17,20,57,0.08);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.empty-box::before {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    top: -110px;
+    right: -100px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(98,105,201,0.12),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+}
+
+
+.empty-box .empty-icon {
+    font-size: 55px;
+
+    margin-bottom: 18px;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 8px 15px
+            rgba(17,20,57,0.15)
+        );
+}
+
+
+.empty-box h3 {
+    font-size: 22px;
+
+    font-weight: 750;
+
+    color: #111439;
+
+    margin: 0 0 8px;
+
+    letter-spacing: -0.4px;
+}
+
+
+.empty-box p {
+    font-size: 14px;
+
+    margin: 0;
+
+    color: #777a91;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .stock-page {
+        padding: 25px 15px 40px;
+    }
+
+    .stock-header h1 {
+        font-size: 30px;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .product-card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .product-icon {
+        width: 56px;
+        height: 56px;
+
+        font-size: 26px;
+
+        border-radius: 16px;
+    }
+
+    .product-meta h3 {
+        font-size: 15px;
+    }
+
+    .add-btn {
+        padding: 10px 17px;
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .product-card {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 16px;
+    }
+
+    .product-info {
+        gap: 14px;
+    }
+
+    .add-btn {
+        width: 100%;
+
+        justify-content: center;
+
+        padding: 13px 18px;
+
+        font-size: 12px;
+    }
+
+    .empty-box {
+        padding: 50px 24px;
+    }
+
+    .empty-box .empty-icon {
+        font-size: 44px;
+    }
+
+    .empty-box h3 {
+        font-size: 18px;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="stock-page">
+
+    <!-- ---------- HEADER ---------- -->
+
+    <div class="stock-header">
+
+        <div class="badge">
+            Inventory Management
+        </div>
+
+        <h1>
+            Add Stock
+        </h1>
+
+        <p>
+            Select an existing product to increase its stock
+        </p>
+
+    </div>
+
+
+    {% if products %}
+
+    <div class="products-grid">
+
+        {% for product in products %}
+
+        <div class="product-card">
+
+            <div class="product-info">
+
+                <div class="product-icon">
+
+                    {% if product.name == "Toy" %}
+                        🧸
+
+                    {% elif product.name == "Helmet" %}
+                        🪖
+
+                    {% elif product.name == "Backpack" %}
+                        🎒
+
+                    {% elif product.name == "Water Bottle" %}
+                        🥤
+
+                    {% elif product.name == "Smartphone" %}
+                        📱
+
+                    {% elif product.name == "Smart Watch" %}
+                        ⌚
+
+                    {% elif product.name == "Headphones" %}
+                        🎧
+
+                    {% elif product.name == "Sports Shoes" %}
+                        👟
+
+                    {% elif product.name == "Hand Bag" %}
+                        👜
+
+                    {% elif product.name == "Laptop" %}
+                        💻
+
+                    {% else %}
+                        📦
+                    {% endif %}
+
+                </div>
+
+
+                <div class="product-meta">
+
+                    <h3>
+                        {{ product.name }}
+                    </h3>
+
+                    <div class="stock-text">
+
+                        Current Stock
+
+                        <span class="stock-number">
+                            {{ product.stock }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'add_stock' product.id %}"
+                class="add-btn"
+            >
+                Add Stock
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <div class="empty-box">
+
+        <span class="empty-icon">
+            📦
+        </span>
+
+        <h3>
+            No Products Found
+        </h3>
+
+        <p>
+            Please add a product first.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

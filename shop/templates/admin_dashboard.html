@@ -1,0 +1,1724 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | Backorder AI{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   ADMIN PAGE
+============================================================ */
+
+.admin-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    color: #111439;
+}
+
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.admin-header {
+    margin-bottom: 32px;
+}
+
+.admin-header .badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    background: #EEF0FF;
+
+    color: #252A68;
+
+    padding: 8px 20px;
+
+    border-radius: 40px;
+
+    border: 1px solid #DDE1F3;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 14px;
+
+    box-shadow:
+        0 6px 16px -8px rgba(37, 42, 104, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.admin-header .badge::before {
+
+    content: "✦";
+
+    color: #5D66C8;
+}
+
+
+.admin-header h1 {
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+
+    margin: 0 0 6px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439 0%,
+            #252A68 60%,
+            #5D66C8 100%
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+.admin-header p {
+
+    color: #686D88;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    margin: 0;
+}
+
+
+/* ============================================================
+   STAT CARDS
+============================================================ */
+
+.dashboard-cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 20px;
+
+    margin-bottom: 32px;
+}
+
+
+.dashboard-card {
+
+    background: rgba(255, 255, 255, 0.88);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border-radius: 28px;
+
+    padding: 26px;
+
+    border: 1px solid #E2E4F0;
+
+    box-shadow:
+
+        0 20px 44px -18px rgba(17, 20, 57, 0.16),
+
+        0 8px 20px -10px rgba(93, 102, 200, 0.10),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.dashboard-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: -50px;
+
+    right: -50px;
+
+    width: 160px;
+
+    height: 160px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.14),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    transition: transform 0.4s ease;
+}
+
+
+.dashboard-card:hover {
+
+    transform: translateY(-5px);
+
+    background: #FFFFFF;
+
+    box-shadow:
+
+        0 34px 60px -20px rgba(17, 20, 57, 0.20),
+
+        0 12px 28px -10px rgba(93, 102, 200, 0.16),
+
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+
+.dashboard-card:hover::before {
+
+    transform: scale(1.4);
+}
+
+
+/* ============================================================
+   CARD TOP
+============================================================ */
+
+.card-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+.card-label {
+
+    color: #686D88;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   CARD ICON
+============================================================ */
+
+.card-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #EEF0FF,
+            #DDE2FF
+        );
+
+    border: 1px solid #DCE0F2;
+
+    box-shadow:
+
+        0 8px 18px -6px rgba(37, 42, 104, 0.18),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+    transition: transform 0.3s ease;
+
+    filter: none;
+}
+
+
+.dashboard-card:hover .card-icon {
+
+    transform:
+        scale(1.1)
+        rotate(-4deg);
+
+    background:
+        linear-gradient(
+            145deg,
+            #E6E9FF,
+            #C9D0FF
+        );
+}
+
+
+/* ============================================================
+   CARD VALUE
+============================================================ */
+
+.card-value {
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+
+    letter-spacing: -1.2px;
+
+    line-height: 1;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ============================================================
+   INVENTORY SECTION
+============================================================ */
+
+.inventory-section {
+
+    background: rgba(255, 255, 255, 0.90);
+
+    backdrop-filter: blur(20px);
+
+    -webkit-backdrop-filter: blur(20px);
+
+    border-radius: 32px;
+
+    border: 1px solid #E2E4F0;
+
+    box-shadow:
+
+        0 24px 50px -20px rgba(17, 20, 57, 0.18),
+
+        0 8px 20px -10px rgba(93, 102, 200, 0.10),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   INVENTORY HEADER
+============================================================ */
+
+.inventory-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 28px 32px;
+
+    border-bottom:
+        1px dashed #E0E2EF;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+
+.inventory-header h2 {
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    margin: 0 0 5px;
+
+    letter-spacing: -0.4px;
+}
+
+
+.inventory-header p {
+
+    color: #686D88;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    margin: 0;
+}
+
+
+/* ============================================================
+   ADD PRODUCT BUTTON
+============================================================ */
+
+.add-product-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 14px 28px;
+
+    border-radius: 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439 0%,
+            #252A68 55%,
+            #5D66C8 100%
+        );
+
+    color: #FFFFFF;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    box-shadow:
+
+        0 16px 32px -10px rgba(17, 20, 57, 0.28),
+
+        0 8px 20px -8px rgba(93, 102, 200, 0.25),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    white-space: nowrap;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.add-product-btn::before {
+
+    content: "+";
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+
+.add-product-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+
+        0 24px 44px -10px rgba(17, 20, 57, 0.32),
+
+        0 12px 28px -8px rgba(93, 102, 200, 0.28),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+
+/* ============================================================
+   TABLE
+============================================================ */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.inventory-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1200px;
+}
+
+
+.inventory-table thead {
+
+    background:
+        #F5F6FC;
+}
+
+
+.inventory-table th {
+
+    padding: 16px 18px;
+
+    text-align: center;
+
+    color: #686D88;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+.inventory-table td {
+
+    padding: 18px;
+
+    border-top:
+        1px solid #ECEEF5;
+
+    color: #454A69;
+
+    font-size: 14px;
+
+    vertical-align: middle;
+
+    text-align: center;
+
+    font-weight: 500;
+}
+
+
+.inventory-table td:first-child,
+.inventory-table th:first-child {
+
+    text-align: left;
+}
+
+
+.inventory-table tbody tr {
+
+    transition:
+        background 0.2s ease;
+}
+
+
+.inventory-table tbody tr:hover {
+
+    background:
+        #F8F9FF;
+}
+
+
+/* ============================================================
+   PRODUCT CELL
+============================================================ */
+
+.product-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.product-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #EEF0FF,
+            #DCE1FF
+        );
+
+    border: 1px solid #DDE1F2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 24px;
+
+    flex-shrink: 0;
+
+    box-shadow:
+
+        0 8px 16px -6px rgba(37, 42, 104, 0.18),
+
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+
+    transition:
+        transform 0.25s ease;
+
+    filter: none;
+}
+
+
+.inventory-table tbody tr:hover .product-icon {
+
+    transform:
+        scale(1.08)
+        rotate(-4deg);
+}
+
+
+.product-name {
+
+    font-weight: 700;
+
+    color: #111439;
+
+    font-size: 14px;
+
+    letter-spacing: -0.2px;
+}
+
+
+.product-id {
+
+    color: #8589A1;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   DATA STYLES
+============================================================ */
+
+.price {
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    color: #252A68;
+}
+
+
+.stock-number {
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    color: #111439;
+}
+
+
+.stock-zero {
+
+    color: #D14B5B;
+}
+
+
+.stock-low {
+
+    color: #C98720;
+}
+
+
+.sold-number {
+
+    color: #5D66C8;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   STATUS BADGES
+============================================================ */
+
+.status,
+.prediction {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px 14px;
+
+    border-radius: 30px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+    white-space: nowrap;
+
+    text-transform: uppercase;
+
+    border: 1px solid transparent;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+
+/* ============================================================
+   STOCK STATUS
+============================================================ */
+
+.status-in {
+
+    background:
+        #EAF8EF;
+
+    color: #25804A;
+
+    border-color: #CDEDD8;
+}
+
+
+.status-low {
+
+    background:
+        #FFF6E6;
+
+    color: #A66B12;
+
+    border-color: #F2DEB6;
+}
+
+
+.status-out {
+
+    background:
+        #FFF0F1;
+
+    color: #C23E4D;
+
+    border-color: #F2D1D5;
+}
+
+
+/* ============================================================
+   ANN PREDICTION
+============================================================ */
+
+.prediction-safe {
+
+    background:
+        #EAF8EF;
+
+    color: #25804A;
+
+    border-color: #CDEDD8;
+}
+
+
+.prediction-risk {
+
+    background:
+        #FFF0F1;
+
+    color: #C23E4D;
+
+    border-color: #F2D1D5;
+}
+
+
+.probability {
+
+    font-weight: 800;
+
+    color: #252A68;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.action-buttons {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+}
+
+
+.edit-product-btn,
+.add-stock-btn,
+.delete-product-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+
+    font-family: inherit;
+
+    text-decoration: none;
+}
+
+
+/* ============================================================
+   EDIT
+============================================================ */
+
+.edit-product-btn {
+
+    background:
+        #EEF0FF;
+
+    color: #252A68;
+
+    border: 1px solid #DDE1F3;
+}
+
+
+.edit-product-btn:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #252A68,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 20px -6px
+        rgba(37, 42, 104, 0.28);
+}
+
+
+/* ============================================================
+   ADD STOCK
+============================================================ */
+
+.add-stock-btn {
+
+    background:
+        #EEF4FF;
+
+    color: #4055A8;
+
+    border: 1px solid #DCE5FF;
+}
+
+
+.add-stock-btn:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #4055A8,
+            #6B78D4
+        );
+
+    color: #FFFFFF;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 20px -6px
+        rgba(64, 85, 168, 0.30);
+}
+
+
+/* ============================================================
+   DELETE
+============================================================ */
+
+.delete-product-btn {
+
+    background:
+        #FFF0F1;
+
+    color: #C23E4D;
+
+    border: 1px solid #F2D1D5;
+}
+
+
+.delete-product-btn:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #C23E4D,
+            #D96572
+        );
+
+    color: #FFFFFF;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 20px -6px
+        rgba(194, 62, 77, 0.30);
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+.empty-box {
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    color: #686D88;
+}
+
+
+.empty-icon {
+
+    font-size: 52px;
+
+    margin-bottom: 16px;
+
+    display: block;
+
+    filter:
+        drop-shadow(
+            0 8px 16px
+            rgba(37, 42, 104, 0.15)
+        );
+}
+
+
+.empty-box h3 {
+
+    color: #111439;
+
+    margin: 0 0 8px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+.empty-box p {
+
+    font-size: 14px;
+
+    margin: 0;
+
+    color: #777B94;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 1100px) {
+
+    .dashboard-cards {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-header h1 {
+
+        font-size: 26px;
+    }
+
+
+    .inventory-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 22px 20px;
+    }
+
+
+    .add-product-btn {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .dashboard-cards {
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+
+    .card-value {
+
+        font-size: 32px;
+    }
+
+
+    .dashboard-card {
+
+        padding: 22px;
+
+        border-radius: 24px;
+    }
+
+
+    .inventory-section {
+
+        border-radius: 26px;
+    }
+
+
+    .inventory-table th,
+    .inventory-table td {
+
+        padding: 14px 12px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .admin-header h1 {
+
+        font-size: 22px;
+    }
+
+
+    .inventory-header h2 {
+
+        font-size: 18px;
+    }
+
+
+    .action-buttons {
+
+        flex-direction: column;
+
+        gap: 6px;
+    }
+
+
+    .edit-product-btn,
+    .add-stock-btn,
+    .delete-product-btn {
+
+        width: 100%;
+
+        justify-content: center;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="admin-page">
+
+
+    <!-- ============================================================
+         HEADER
+    ============================================================ -->
+
+    <div class="admin-header">
+
+        <div class="badge">
+            Admin Control Center
+        </div>
+
+        <h1>
+            Admin Dashboard
+        </h1>
+
+        <p>
+            Manage products, stock and ANN backorder predictions
+        </p>
+
+    </div>
+
+
+    <!-- ============================================================
+         STAT CARDS
+    ============================================================ -->
+
+    <div class="dashboard-cards">
+
+
+        <!-- TOTAL PRODUCTS -->
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-label">
+                    Total Products
+                </div>
+
+                <div class="card-icon">
+                    📦
+                </div>
+
+            </div>
+
+            <div class="card-value">
+                {{ total_products }}
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL ORDERS -->
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-label">
+                    Total Orders
+                </div>
+
+                <div class="card-icon">
+                    🛒
+                </div>
+
+            </div>
+
+            <div class="card-value">
+                {{ total_orders }}
+            </div>
+
+        </div>
+
+
+        <!-- BACKORDER PRODUCTS -->
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-label">
+                    Backorder Products
+                </div>
+
+                <div class="card-icon">
+                    ⚠️
+                </div>
+
+            </div>
+
+            <div class="card-value">
+                {{ backorder_products }}
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-label">
+                    Low Stock Products
+                </div>
+
+                <div class="card-icon">
+                    📊
+                </div>
+
+            </div>
+
+            <div class="card-value">
+                {{ low_stock_products }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         INVENTORY SECTION
+    ============================================================ -->
+
+    <div class="inventory-section">
+
+
+        <!-- INVENTORY HEADER -->
+
+        <div class="inventory-header">
+
+            <div>
+
+                <h2>
+                    Product Inventory
+                </h2>
+
+                <p>
+                    Live stock, sales and ANN prediction
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'add_product' %}"
+                class="add-product-btn"
+            >
+                Add Product
+            </a>
+
+        </div>
+
+
+        <!-- ========================================================
+             TABLE
+        ========================================================= -->
+
+        <div class="table-wrapper">
+
+            <table class="inventory-table">
+
+
+                <!-- TABLE HEADER -->
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Sold
+                        </th>
+
+                        <th>
+                            Stock Status
+                        </th>
+
+                        <th>
+                            ANN Prediction
+                        </th>
+
+                        <th>
+                            Probability
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- TABLE BODY -->
+
+                <tbody>
+
+                    {% for item in products_data %}
+
+                    <tr>
+
+
+                        <!-- PRODUCT -->
+
+                        <td>
+
+                            <div class="product-info">
+
+                                <div class="product-icon">
+
+                                    {% if item.product.name == "Toy" %}
+
+                                        🧸
+
+                                    {% elif item.product.name == "Helmet" %}
+
+                                        🪖
+
+                                    {% elif item.product.name == "Backpack" %}
+
+                                        🎒
+
+                                    {% elif item.product.name == "Water Bottle" %}
+
+                                        🥤
+
+                                    {% elif item.product.name == "Smartphone" %}
+
+                                        📱
+
+                                    {% elif item.product.name == "Smart Watch" %}
+
+                                        ⌚
+
+                                    {% elif item.product.name == "Perfume" %}
+
+                                        🧴
+
+                                    {% elif item.product.name == "Headphones" %}
+
+                                        🎧
+
+                                    {% elif item.product.name == "Sports Shoes" %}
+
+                                        👟
+
+                                    {% elif item.product.name == "Hand Bag" %}
+
+                                        👜
+
+                                    {% elif item.product.name == "Laptop" %}
+
+                                        💻
+
+                                    {% elif item.product.name == "Cricket Bat" %}
+
+                                        🏏
+
+                                    {% else %}
+
+                                        📦
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="product-name">
+
+                                        {{ item.product.name }}
+
+                                    </div>
+
+                                    <div class="product-id">
+
+                                        Product #{{ item.product.id }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            {{ item.product.category }}
+
+                        </td>
+
+
+                        <!-- PRICE -->
+
+                        <td class="price">
+
+                            ₹{{ item.product.price|floatformat:2 }}
+
+                        </td>
+
+
+                        <!-- STOCK -->
+
+                        <td>
+
+                            {% if item.product.stock == 0 %}
+
+                                <span class="stock-number stock-zero">
+
+                                    {{ item.product.stock }}
+
+                                </span>
+
+                            {% elif item.product.stock < 20 %}
+
+                                <span class="stock-number stock-low">
+
+                                    {{ item.product.stock }}
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="stock-number">
+
+                                    {{ item.product.stock }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- SOLD -->
+
+                        <td>
+
+                            <span class="sold-number">
+
+                                {{ item.sold }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STOCK STATUS -->
+
+                        <td>
+
+                            {% if item.product.stock == 0 %}
+
+                                <span class="status status-out">
+
+                                    Out of Stock
+
+                                </span>
+
+                            {% elif item.product.stock < 20 %}
+
+                                <span class="status status-low">
+
+                                    Low Stock
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="status status-in">
+
+                                    In Stock
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================================
+                             ANN PREDICTION
+                        ================================================= -->
+
+                        <td>
+
+                            {% if item.product.stock == 0 %}
+
+                                <span class="prediction prediction-risk">
+
+                                    ⚠ Backorder
+
+                                </span>
+
+                            {% elif item.product.prediction == "BACKORDER" %}
+
+                                <span class="prediction prediction-risk">
+
+                                    ⚠ Backorder
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="prediction prediction-safe">
+
+                                    ✓ No Backorder
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- PROBABILITY -->
+
+                        <td>
+
+                            {% if item.product.stock == 0 %}
+
+                                <span class="probability">
+
+                                    100.0%
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="probability">
+
+                                    {{ item.product.prediction_probability|floatformat:1 }}%
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="action-buttons">
+
+
+                                <!-- EDIT -->
+
+                                <a
+                                    href="{% url 'edit_product' item.product.id %}"
+                                    class="edit-product-btn"
+                                >
+
+                                    ✏ Edit
+
+                                </a>
+
+
+                                <!-- ADD STOCK -->
+
+                                <a
+                                    href="{% url 'add_stock' item.product.id %}"
+                                    class="add-stock-btn"
+                                >
+
+                                    + Stock
+
+                                </a>
+
+
+                                <!-- DELETE -->
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete_product' item.product.id %}"
+                                    onsubmit="return confirm('Are you sure you want to delete {{ item.product.name }}?');"
+                                    style="display: inline;"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="delete-product-btn"
+                                    >
+
+                                        🗑 Delete
+
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY -->
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="9">
+
+                            <div class="empty-box">
+
+                                <span class="empty-icon">
+
+                                    📦
+
+                                </span>
+
+                                <h3>
+
+                                    No Products Found
+
+                                </h3>
+
+                                <p>
+
+                                    Add products to start managing your inventory.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

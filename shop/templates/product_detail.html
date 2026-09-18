@@ -1,0 +1,1494 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{ product.name }} | Backorder AI{% endblock %}
+
+{% block page_title %}Product Details{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   WHITE LILAC + DARK BLUE THEME
+   Background : #F8F8F9
+   Dark Blue  : #111439
+   Indigo     : #252A68
+   Soft Blue  : #5D66C8
+   Lilac      : #EEF0FF
+   Border     : #E2E4F0
+   Muted      : #686D88
+============================================================ */
+
+
+/* ---------- PAGE WRAPPER ---------- */
+
+.product-detail-page {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+
+/* ---------- BACK LINK ---------- */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+    color: #111439;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 800;
+    transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.back-link:hover {
+    gap: 10px;
+    color: #5D66C8;
+}
+
+
+/* ---------- MAIN PRODUCT CARD ---------- */
+
+.product-main-card {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    border: 1px solid #E2E4F0;
+    border-radius: 40px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 30px 70px -30px rgba(17, 20, 57, 0.25),
+        0 15px 35px -20px rgba(37, 42, 104, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+
+    align-items: start;
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* ---------- TOP RIGHT BLUE GLOW ---------- */
+
+.product-main-card::before {
+    content: "";
+
+    position: absolute;
+    top: -130px;
+    right: -130px;
+
+    width: 400px;
+    height: 400px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.13),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+
+/* ---------- BOTTOM LEFT LILAC GLOW ---------- */
+
+.product-main-card::after {
+    content: "";
+
+    position: absolute;
+    bottom: -160px;
+    left: -160px;
+
+    width: 420px;
+    height: 420px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.09),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+
+/* ---------- PRODUCT IMAGE ---------- */
+
+.product-image-box {
+    width: 100%;
+    height: 460px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #EEF0FF,
+            #F8F8F9 55%,
+            #E7E9FB
+        );
+
+    border: 1px solid #E2E4F0;
+    border-radius: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 45px -20px rgba(17, 20, 57, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    position: relative;
+    z-index: 1;
+
+    transition: transform 0.4s ease;
+}
+
+
+/* ---------- BLUE GLOW BEHIND PRODUCT ---------- */
+
+.product-image-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 300px;
+    height: 300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.20),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+
+    filter: blur(25px);
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+
+    opacity: 0.75;
+}
+
+
+.product-image-box:hover {
+    transform: scale(1.01);
+}
+
+
+.product-image-box:hover::before {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.15);
+}
+
+
+/* ---------- PRODUCT IMAGE ---------- */
+
+.product-image-box img {
+    position: relative;
+
+    z-index: 1;
+
+    width: 85%;
+    height: 85%;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 24px 30px
+            rgba(17, 20, 57, 0.18)
+        );
+
+    transition: transform 0.4s ease;
+}
+
+
+.product-image-box:hover img {
+    transform: scale(1.06);
+}
+
+
+/* ---------- FALLBACK ICON ---------- */
+
+.product-image-icon {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 140px;
+
+    filter:
+        drop-shadow(
+            0 24px 30px
+            rgba(17, 20, 57, 0.18)
+        );
+
+    animation:
+        floatIcon 4s ease-in-out infinite;
+}
+
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+}
+
+
+/* ---------- PRODUCT INFO ---------- */
+
+.product-info {
+    padding-top: 5px;
+
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ---------- CATEGORY ---------- */
+
+.product-category {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    background: #EEF0FF;
+
+    color: #252A68;
+
+    border: 1px solid #E0E2F2;
+
+    padding: 8px 18px;
+
+    border-radius: 30px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 16px;
+
+    box-shadow:
+        0 6px 16px -10px
+        rgba(17, 20, 57, 0.20);
+}
+
+
+.product-category::before {
+    content: "✦";
+
+    font-size: 12px;
+
+    color: #5D66C8;
+}
+
+
+/* ---------- PRODUCT TITLE ---------- */
+
+.product-info h1 {
+    margin: 0 0 14px;
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    letter-spacing: -1.2px;
+
+    line-height: 1.1;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+/* ---------- DESCRIPTION ---------- */
+
+.product-description {
+    color: #686D88;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    margin-bottom: 26px;
+
+    font-weight: 500;
+}
+
+
+/* ---------- PRICE ---------- */
+
+.product-price {
+    font-size: 38px;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+    margin-bottom: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+/* ---------- STOCK ---------- */
+
+.stock-info {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+
+    padding: 11px 20px;
+
+    border-radius: 30px;
+
+    background: #F8F8F9;
+
+    border: 1px solid #E2E4F0;
+
+    box-shadow:
+        inset 0 2px 6px
+        rgba(17, 20, 57, 0.04),
+        0 4px 12px -8px
+        rgba(17, 20, 57, 0.15);
+}
+
+
+.stock-label {
+    color: #686D88;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.stock-value {
+    font-size: 14px;
+
+    font-weight: 800;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.stock-value::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(93, 102, 200, 0.10);
+}
+
+
+.stock-available {
+    color: #21864B;
+}
+
+
+.stock-low {
+    color: #C57B1C;
+}
+
+
+.stock-out {
+    color: #C23B3B;
+}
+
+
+/* ---------- SOLD INFO ---------- */
+
+.sold-info {
+    margin-bottom: 24px;
+
+    padding: 14px 20px;
+
+    background: #F8F8F9;
+
+    border: 1px solid #E2E4F0;
+
+    border-radius: 18px;
+
+    color: #686D88;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.9);
+}
+
+
+.sold-info strong {
+    color: #252A68;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   PREDICTION CARD
+============================================================ */
+
+.prediction-card {
+    border-radius: 24px;
+
+    padding: 24px;
+
+    margin-bottom: 24px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 14px 30px -16px
+        rgba(17, 20, 57, 0.20),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.9);
+}
+
+
+.prediction-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -50px;
+    right: -50px;
+
+    width: 160px;
+    height: 160px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ---------- BACKORDER CARD ---------- */
+
+.backorder-card {
+    background:
+        linear-gradient(
+            145deg,
+            #FFF5F5,
+            #FFF0F0
+        );
+
+    border: 1px solid #F2DADA;
+}
+
+
+.backorder-card::before {
+    background:
+        radial-gradient(
+            circle,
+            rgba(194, 59, 59, 0.12),
+            transparent 70%
+        );
+}
+
+
+.backorder-title {
+    color: #C23B3B;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+    letter-spacing: -0.3px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.backorder-description {
+    color: #686D88;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin-bottom: 16px;
+
+    font-weight: 500;
+}
+
+
+/* ---------- SAFE CARD ---------- */
+
+.safe-card {
+    background:
+        linear-gradient(
+            145deg,
+            #F1FBF5,
+            #EAF8F0
+        );
+
+    border: 1px solid #D3EBDD;
+}
+
+
+.safe-card::before {
+    background:
+        radial-gradient(
+            circle,
+            rgba(33, 134, 75, 0.12),
+            transparent 70%
+        );
+}
+
+
+.safe-title {
+    color: #21864B;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+    letter-spacing: -0.3px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.safe-description {
+    color: #686D88;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin-bottom: 16px;
+
+    font-weight: 500;
+}
+
+
+/* ---------- PROBABILITY ---------- */
+
+.probability-box {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+
+.probability-label {
+    color: #686D88;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+}
+
+
+.probability-value {
+    font-size: 22px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* ---------- PROGRESS BAR ---------- */
+
+.progress-bar {
+    width: 100%;
+
+    height: 10px;
+
+    background: #E5E7F0;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        inset 0 2px 4px
+        rgba(17, 20, 57, 0.08);
+}
+
+
+.progress-fill {
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #252A68,
+            #5D66C8
+        );
+
+    transition: width 0.6s ease;
+}
+
+
+.backorder-card .progress-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #C23B3B,
+            #E06B6B
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(194, 59, 59, 0.25);
+}
+
+
+.safe-card .progress-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #21864B,
+            #55B979
+        );
+
+    box-shadow:
+        0 0 12px
+        rgba(33, 134, 75, 0.25);
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.product-actions {
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+
+/* ---------- ADD TO CART ---------- */
+
+.add-cart-btn {
+    flex: 1;
+
+    min-width: 180px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 60%,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    text-align: center;
+
+    padding: 16px 24px;
+
+    border-radius: 40px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    box-shadow:
+        0 16px 32px -12px
+        rgba(17, 20, 57, 0.35),
+
+        0 8px 20px -10px
+        rgba(93, 102, 200, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* ---------- BUTTON SHINE ---------- */
+
+.add-cart-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent
+        );
+
+    transition: left 0.7s ease;
+}
+
+
+.add-cart-btn:hover::before {
+    left: 100%;
+}
+
+
+.add-cart-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 24px 44px -12px
+        rgba(17, 20, 57, 0.40),
+
+        0 12px 28px -10px
+        rgba(93, 102, 200, 0.35);
+}
+
+
+/* ---------- DISABLED BUTTON ---------- */
+
+.add-cart-btn.disabled {
+    background: #E8E9EF;
+
+    color: #8A8D9F;
+
+    pointer-events: none;
+
+    box-shadow: none;
+}
+
+
+/* ---------- BACK PRODUCTS BUTTON ---------- */
+
+.back-products-btn {
+    flex: 1;
+
+    min-width: 150px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #DDE0EF;
+
+    color: #252A68;
+
+    text-align: center;
+
+    padding: 16px 24px;
+
+    border-radius: 40px;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    transition: all 0.25s ease;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    box-shadow:
+        0 10px 24px -14px
+        rgba(17, 20, 57, 0.18);
+}
+
+
+.back-products-btn:hover {
+    background: #EEF0FF;
+
+    border-color: #C9CDF0;
+
+    color: #111439;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 32px -14px
+        rgba(17, 20, 57, 0.22);
+}
+
+
+/* ============================================================
+   AI INFO
+============================================================ */
+
+.ai-info {
+    margin-top: 28px;
+
+    padding-top: 24px;
+
+    border-top:
+        1px dashed #DDE0EF;
+}
+
+
+.ai-info-title {
+    color: #111439;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    margin-bottom: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    letter-spacing: -0.2px;
+}
+
+
+.ai-info-text {
+    color: #686D88;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 900px) {
+
+    .product-main-card {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+
+        padding: 28px;
+
+        border-radius: 32px;
+    }
+
+    .product-image-box {
+        height: 360px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .product-main-card {
+        padding: 22px;
+
+        border-radius: 26px;
+    }
+
+    .product-image-box {
+        height: 280px;
+
+        border-radius: 22px;
+    }
+
+    .product-image-icon {
+        font-size: 100px;
+    }
+
+    .product-info h1 {
+        font-size: 28px;
+    }
+
+    .product-price {
+        font-size: 30px;
+    }
+
+    .product-actions {
+        flex-direction: column;
+    }
+
+    .add-cart-btn,
+    .back-products-btn {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+    .stock-info {
+        display: flex;
+
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .product-info h1 {
+        font-size: 24px;
+    }
+
+    .product-price {
+        font-size: 26px;
+    }
+
+    .prediction-card {
+        padding: 20px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="product-detail-page">
+
+
+    <!-- ---------- BACK LINK ---------- -->
+
+    <a href="{% url 'products' %}" class="back-link">
+        ← Back to Products
+    </a>
+
+
+    <!-- ---------- MAIN CARD ---------- -->
+
+    <div class="product-main-card">
+
+
+        <!-- ---------- PRODUCT IMAGE ---------- -->
+
+        <div class="product-image-box">
+
+            {% if product.name == "Toy" %}
+
+                <img
+                    src="{% static 'images/toy.png' %}"
+                    alt="Toy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    🧸
+                </div>
+
+
+            {% elif product.name == "Helmet" %}
+
+                <img
+                    src="{% static 'images/helmet.png' %}"
+                    alt="Helmet"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    🪖
+                </div>
+
+
+            {% elif product.name == "Backpack" %}
+
+                <img
+                    src="{% static 'images/bag.png' %}"
+                    alt="Backpack"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    🎒
+                </div>
+
+
+            {% elif product.name == "Bag" %}
+
+                <img
+                    src="{% static 'images/bag.png' %}"
+                    alt="Bag"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    👜
+                </div>
+
+
+            {% elif product.name == "Water Bottle" %}
+
+                <img
+                    src="{% static 'images/bottle.png' %}"
+                    alt="Water Bottle"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    🥤
+                </div>
+
+
+            {% elif product.name == "Bottle" %}
+
+                <img
+                    src="{% static 'images/bottle.png' %}"
+                    alt="Bottle"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    🍼
+                </div>
+
+
+            {% elif product.name == "Smartphone" %}
+
+                <img
+                    src="{% static 'images/phone.png' %}"
+                    alt="Smartphone"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    📱
+                </div>
+
+
+            {% elif product.name == "Phone" %}
+
+                <img
+                    src="{% static 'images/phone.png' %}"
+                    alt="Phone"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    📱
+                </div>
+
+
+            {% elif product.name == "Smart Watch" %}
+
+                <img
+                    src="{% static 'images/watch.png' %}"
+                    alt="Smart Watch"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    ⌚
+                </div>
+
+
+            {% elif product.name == "Watch" %}
+
+                <img
+                    src="{% static 'images/watch.png' %}"
+                    alt="Watch"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                >
+
+                <div
+                    class="product-image-icon"
+                    style="display:none;"
+                >
+                    ⌚
+                </div>
+
+
+            {% elif product.name == "Headphones" %}
+
+                <div class="product-image-icon">
+                    🎧
+                </div>
+
+
+            {% elif product.name == "Sports Shoes" %}
+
+                <div class="product-image-icon">
+                    👟
+                </div>
+
+
+            {% elif product.name == "Hand Bag" %}
+
+                <div class="product-image-icon">
+                    👜
+                </div>
+
+
+            {% elif product.name == "Laptop" %}
+
+                <div class="product-image-icon">
+                    💻
+                </div>
+
+
+            {% elif product.name == "Cricket Bat" %}
+
+                <div class="product-image-icon">
+                    🏏
+                </div>
+
+
+            {% else %}
+
+                <div class="product-image-icon">
+                    📦
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ---------- PRODUCT INFO ---------- -->
+
+        <div class="product-info">
+
+
+            <!-- CATEGORY -->
+
+            <div class="product-category">
+                {{ product.category }}
+            </div>
+
+
+            <!-- PRODUCT NAME -->
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+
+            <!-- DESCRIPTION -->
+
+            <p class="product-description">
+
+                {% if product.description %}
+
+                    {{ product.description }}
+
+                {% else %}
+
+                    Good quality {{ product.name }}
+                    available at an affordable price.
+
+                {% endif %}
+
+            </p>
+
+
+            <!-- PRICE -->
+
+            <div class="product-price">
+                ₹{{ product.price }}
+            </div>
+
+
+            <!-- STOCK -->
+
+            <div class="stock-info">
+
+                <span class="stock-label">
+                    Available Stock:
+                </span>
+
+                {% if product.stock <= 0 %}
+
+                    <span class="stock-value stock-out">
+                        Out of Stock
+                    </span>
+
+                {% elif product.stock < 20 %}
+
+                    <span class="stock-value stock-low">
+                        {{ product.stock }} units
+                    </span>
+
+                {% else %}
+
+                    <span class="stock-value stock-available">
+                        {{ product.stock }} units
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <!-- ANN PREDICTION -->
+
+            {% if product.prediction == "BACKORDER" %}
+
+                <div class="prediction-card backorder-card">
+
+                    <div class="backorder-title">
+                        ⚠️ Backorder Risk Detected
+                    </div>
+
+                    <div class="backorder-description">
+
+                        Our ANN model predicts a possible
+                        backorder risk for this product.
+
+                    </div>
+
+
+                    <div class="probability-box">
+
+                        <span class="probability-label">
+                            Prediction Probability
+                        </span>
+
+                        <span class="probability-value">
+                            {{ product.prediction_probability }}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="width: {{ product.prediction_probability }}%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- ACTIONS -->
+
+            <div class="product-actions">
+
+                {% if product.stock > 0 %}
+
+                    <a
+                        href="{% url 'add_to_cart' product.id %}"
+                        class="add-cart-btn"
+                    >
+                        🛒 Add to Cart
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="#"
+                        class="add-cart-btn disabled"
+                    >
+                        Out of Stock
+                    </a>
+
+                {% endif %}
+
+
+                <a
+                    href="{% url 'products' %}"
+                    class="back-products-btn"
+                >
+                    ← Continue Shopping
+                </a>
+
+            </div>
+
+
+            <!-- AI INFO -->
+
+            <div class="ai-info">
+
+                <div class="ai-info-title">
+                    🤖 About Backorder AI
+                </div>
+
+                <div class="ai-info-text">
+
+                    The Artificial Neural Network (ANN)
+                    analyzes inventory and demand-related
+                    information to estimate the possibility
+                    of a product going on backorder.
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

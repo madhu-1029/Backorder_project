@@ -1,0 +1,2100 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Home | Backorder AI{% endblock %}
+
+{% block page_title %}Home{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   WHITE LILAC + DARK BLUE THEME
+
+   Background   : #F8F8F9
+   Dark Blue    : #111439
+   Deep Blue    : #252A68
+   Indigo       : #5D66C8
+   Light Lilac  : #EEF0FF
+   Border       : #E4E5EF
+   Text         : #111439
+   Muted        : #666B86
+============================================================ */
+
+
+/* ============================================================
+   HOME WRAPPER
+============================================================ */
+
+.home-wrap {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 40px;
+
+    padding-bottom: 30px;
+}
+
+
+/* ============================================================
+   HERO SECTION
+============================================================ */
+
+.hero {
+    position: relative;
+
+    border-radius: 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FFFFFF 0%,
+            #F5F6FF 48%,
+            #EEF0FF 100%
+        );
+
+    border: 1px solid #E1E3F1;
+
+    padding: 56px 60px;
+
+    box-shadow:
+        0 30px 65px rgba(17, 20, 57, 0.12),
+        0 10px 30px rgba(17, 20, 57, 0.06);
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+}
+
+
+/* ---------- HERO BLUE GLOW ---------- */
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    top: -100px;
+    right: -90px;
+
+    width: 360px;
+    height: 360px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.18),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ---------- HERO LILAC GLOW ---------- */
+
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: -160px;
+    left: -100px;
+
+    width: 420px;
+    height: 420px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(37, 42, 104, 0.10),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   HERO CONTENT
+============================================================ */
+
+.hero-content {
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 540px;
+}
+
+
+/* ============================================================
+   HERO BADGE
+============================================================ */
+
+.hero-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    background: #EEF0FF;
+
+    color: #111439;
+
+    padding: 9px 20px;
+
+    border-radius: 40px;
+
+    border: 1px solid #DDE1FF;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 8px 18px rgba(17, 20, 57, 0.06);
+}
+
+
+.hero-badge::before {
+    content: "✦";
+
+    font-size: 14px;
+
+    color: #5D66C8;
+}
+
+
+/* ============================================================
+   HERO TITLE
+============================================================ */
+
+.hero-title {
+    font-size: 52px;
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+    color: #111439;
+
+    margin: 0 0 20px;
+}
+
+
+.hero-title span {
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 55%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+/* ============================================================
+   HERO DESCRIPTION
+============================================================ */
+
+.hero-description {
+    font-size: 17px;
+
+    line-height: 1.7;
+
+    color: #666B86;
+
+    margin: 0 0 30px;
+
+    max-width: 480px;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   SHOP BUTTON
+============================================================ */
+
+.shop-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 55%,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    padding: 15px 32px;
+
+    border-radius: 40px;
+
+    font-weight: 800;
+
+    font-size: 15px;
+
+    letter-spacing: 0.3px;
+
+    box-shadow:
+        0 16px 32px rgba(17, 20, 57, 0.22),
+        0 8px 20px rgba(93, 102, 200, 0.18);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* ---------- BUTTON SHINE ---------- */
+
+.shop-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent
+        );
+
+    transition: left 0.7s ease;
+}
+
+
+.shop-btn:hover::before {
+    left: 100%;
+}
+
+
+/* ---------- BUTTON ARROW ---------- */
+
+.shop-btn::after {
+    content: "→";
+
+    font-size: 18px;
+
+    transition: transform 0.25s ease;
+}
+
+
+/* ---------- BUTTON HOVER ---------- */
+
+.shop-btn:hover {
+    transform: translateY(-3px);
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 24px 44px rgba(17, 20, 57, 0.25),
+        0 12px 28px rgba(93, 102, 200, 0.20);
+}
+
+
+.shop-btn:hover::after {
+    transform: translateX(4px);
+}
+
+
+/* ============================================================
+   HERO AI VISUAL
+============================================================ */
+
+.hero-visual {
+    position: relative;
+
+    z-index: 2;
+
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   AI CARD
+============================================================ */
+
+.ai-card {
+    width: 320px;
+
+    background:
+        rgba(255, 255, 255, 0.92);
+
+    border: 1px solid #E0E3F3;
+
+    backdrop-filter: blur(20px);
+
+    -webkit-backdrop-filter: blur(20px);
+
+    border-radius: 28px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 34px 68px rgba(17, 20, 57, 0.15),
+        0 12px 30px rgba(93, 102, 200, 0.08);
+
+    transform: rotate(-2deg);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+.ai-card:hover {
+    transform: rotate(0deg) scale(1.02);
+
+    box-shadow:
+        0 40px 80px rgba(17, 20, 57, 0.18),
+        0 20px 40px rgba(93, 102, 200, 0.12);
+}
+
+
+/* ============================================================
+   AI CARD HEADER
+============================================================ */
+
+.ai-card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1px dashed #DDE0EE;
+}
+
+
+.ai-card-title {
+    font-size: 15px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* ============================================================
+   AI STATUS DOT
+============================================================ */
+
+.ai-dot {
+    width: 10px;
+    height: 10px;
+
+    background: #22C55E;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 4px rgba(34, 197, 94, 0.15);
+
+    animation: pulse 2s infinite;
+}
+
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 4px rgba(34, 197, 94, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 8px rgba(34, 197, 94, 0.04);
+    }
+}
+
+
+/* ============================================================
+   AI STATUS
+============================================================ */
+
+.ai-status {
+    background:
+        linear-gradient(
+            135deg,
+            #EEF9F1,
+            #E7F7EC
+        );
+
+    color: #16803C;
+
+    padding: 12px 16px;
+
+    border-radius: 16px;
+
+    border: 1px solid #D4F0DC;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+}
+
+
+.ai-status::before {
+    content: "✓";
+
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   MINI CHART
+============================================================ */
+
+.mini-chart {
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 8px;
+
+    height: 70px;
+
+    margin-bottom: 14px;
+}
+
+
+.mini-chart .bar {
+    flex: 1;
+
+    background:
+        linear-gradient(
+            180deg,
+            #5D66C8,
+            #252A68
+        );
+
+    border-radius: 8px 8px 4px 4px;
+
+    min-height: 20%;
+
+    transition: height 0.3s ease;
+
+    box-shadow:
+        0 6px 14px rgba(37, 42, 104, 0.18);
+}
+
+
+.mini-chart .bar:nth-child(1) {
+    height: 35%;
+}
+
+
+.mini-chart .bar:nth-child(2) {
+    height: 55%;
+}
+
+
+.mini-chart .bar:nth-child(3) {
+    height: 45%;
+}
+
+
+.mini-chart .bar:nth-child(4) {
+    height: 80%;
+}
+
+
+.mini-chart .bar:nth-child(5) {
+    height: 95%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #7B83D6,
+            #5D66C8
+        );
+}
+
+
+/* ============================================================
+   AI METRICS
+============================================================ */
+
+.ai-metric {
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 12px;
+
+    color: #777B96;
+
+    font-weight: 600;
+}
+
+
+.ai-metric strong {
+    color: #111439;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   CATEGORIES
+============================================================ */
+
+.categories {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    justify-content: center;
+}
+
+
+/* ---------- CATEGORY PILL ---------- */
+
+.category-pill {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E3E5F0;
+
+    padding: 12px 22px;
+
+    border-radius: 40px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #111439;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    box-shadow:
+        0 8px 20px rgba(17, 20, 57, 0.06);
+}
+
+
+/* ---------- CATEGORY HOVER ---------- */
+
+.category-pill:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68
+        );
+
+    border-color: #252A68;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 16px 32px rgba(17, 20, 57, 0.18);
+
+    color: #FFFFFF;
+}
+
+
+.category-pill:hover .cat-icon {
+    transform: scale(1.15);
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(255, 255, 255, 0.35)
+        );
+}
+
+
+/* ---------- CATEGORY ICON ---------- */
+
+.category-pill .cat-icon {
+    font-size: 20px;
+
+    line-height: 1;
+
+    transition:
+        filter 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+/* ============================================================
+   SECTION HEADER
+============================================================ */
+
+.section-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    margin-bottom: 24px;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   SECTION TITLE
+============================================================ */
+
+.section-title {
+    font-size: 28px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    color: #111439;
+
+    margin: 0 0 4px;
+}
+
+
+.section-subtitle {
+    font-size: 14px;
+
+    color: #666B86;
+
+    margin: 0;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   VIEW ALL
+============================================================ */
+
+.view-all {
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    color: #252A68;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 10px 18px;
+
+    border-radius: 40px;
+
+    background: #EEF0FF;
+
+    border: 1px solid #DDE1FF;
+
+    transition: all 0.25s ease;
+}
+
+
+.view-all:hover {
+    gap: 10px;
+
+    color: #FFFFFF;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #5D66C8
+        );
+
+    border-color: transparent;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(17, 20, 57, 0.18);
+}
+
+
+/* ============================================================
+   PRODUCT GRID
+============================================================ */
+
+.product-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fill,
+            minmax(200px, 1fr)
+        );
+
+    gap: 22px;
+}
+
+
+/* ============================================================
+   PRODUCT CARD
+============================================================ */
+
+.product-card {
+    background: #FFFFFF;
+
+    border: 1px solid #E4E5EF;
+
+    border-radius: 26px;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+
+    box-shadow:
+        0 14px 30px rgba(17, 20, 57, 0.07);
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.product-card:hover {
+    transform: translateY(-6px);
+
+    border-color: #D2D6F3;
+
+    box-shadow:
+        0 30px 55px rgba(17, 20, 57, 0.14),
+        0 15px 30px rgba(93, 102, 200, 0.08);
+}
+
+
+/* ============================================================
+   PRODUCT IMAGE
+============================================================ */
+
+.product-image {
+    height: 170px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #F1F2FF,
+            #FFFFFF
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 16px;
+}
+
+
+/* ---------- IMAGE GLOW ---------- */
+
+.product-image::before {
+    content: "";
+
+    position: absolute;
+
+    top: 55%;
+    left: 50%;
+
+    width: 150px;
+    height: 150px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.16),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    filter: blur(12px);
+
+    pointer-events: none;
+
+    transition:
+        transform 0.5s ease;
+}
+
+
+.product-card:hover .product-image::before {
+    transform:
+        translate(-50%, -50%)
+        scale(1.3);
+}
+
+
+/* ============================================================
+   PRODUCT IMAGE IMG
+============================================================ */
+
+.product-image img {
+    position: relative;
+
+    z-index: 1;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.4s ease;
+
+    filter:
+        drop-shadow(
+            0 10px 18px
+            rgba(17, 20, 57, 0.15)
+        );
+}
+
+
+.product-card:hover .product-image img {
+    transform: scale(1.08);
+}
+
+
+/* ============================================================
+   PRODUCT EMOJI
+============================================================ */
+
+.product-emoji {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 60px;
+
+    line-height: 1;
+
+    filter:
+        drop-shadow(
+            0 10px 14px
+            rgba(17, 20, 57, 0.12)
+        );
+}
+
+
+/* ============================================================
+   CATEGORY TAG
+============================================================ */
+
+.product-category-tag {
+    position: absolute;
+
+    top: 12px;
+    left: 12px;
+
+    background: #EEF0FF;
+
+    color: #252A68;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
+    border: 1px solid #DDE1FF;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    text-transform: uppercase;
+
+    box-shadow:
+        0 4px 10px rgba(17, 20, 57, 0.06);
+
+    z-index: 2;
+}
+
+
+/* ============================================================
+   HEART ICON
+============================================================ */
+
+.heart-icon {
+    position: absolute;
+
+    top: 12px;
+    right: 14px;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E2E4EF;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+
+    color: #777B96;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+
+    z-index: 2;
+
+    box-shadow:
+        0 4px 10px rgba(17, 20, 57, 0.08);
+}
+
+
+.heart-icon:hover {
+    color: #E05B75;
+
+    transform: scale(1.15);
+
+    background: #FFF3F5;
+
+    border-color: #F2C5CF;
+
+    box-shadow:
+        0 8px 18px rgba(224, 91, 117, 0.15);
+}
+
+
+/* ============================================================
+   PRODUCT INFO
+============================================================ */
+
+.product-info {
+    padding: 16px 18px 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+}
+
+
+/* ============================================================
+   PRODUCT NAME
+============================================================ */
+
+.product-name {
+    font-size: 16px;
+
+    font-weight: 700;
+
+    color: #111439;
+
+    margin-bottom: 6px;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* ============================================================
+   PRODUCT PRICE
+============================================================ */
+
+.product-price {
+    font-size: 18px;
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+
+    margin-bottom: 10px;
+}
+
+
+/* ============================================================
+   STOCK
+============================================================ */
+
+.stock {
+    font-size: 11px;
+
+    color: #16803C;
+
+    font-weight: 700;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 16px;
+
+    background: #EEF9F1;
+
+    border: 1px solid #D6F0DC;
+
+    padding: 5px 12px;
+
+    border-radius: 20px;
+
+    align-self: flex-start;
+}
+
+
+.stock-dot {
+    width: 6px;
+    height: 6px;
+
+    background: #22C55E;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 3px rgba(34, 197, 94, 0.14);
+}
+
+
+/* ============================================================
+   VIEW PRODUCT BUTTON
+============================================================ */
+
+.view-product {
+    margin-top: auto;
+
+    display: block;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 55%,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    padding: 12px;
+
+    border-radius: 14px;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    box-shadow:
+        0 12px 24px rgba(17, 20, 57, 0.18);
+
+    transition:
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* ---------- BUTTON SHINE ---------- */
+
+.view-product::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent
+        );
+
+    transition: left 0.6s ease;
+}
+
+
+.view-product:hover::before {
+    left: 100%;
+}
+
+
+/* ---------- BUTTON HOVER ---------- */
+
+.view-product:hover {
+    color: #FFFFFF;
+
+    box-shadow:
+        0 20px 36px rgba(17, 20, 57, 0.25),
+        0 8px 20px rgba(93, 102, 200, 0.18);
+
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================
+   FEATURES
+============================================================ */
+
+.features {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(200px, 1fr)
+        );
+
+    gap: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FFFFFF,
+            #F3F4FF
+        );
+
+    border: 1px solid #E2E4F0;
+
+    border-radius: 30px;
+
+    padding: 24px 28px;
+
+    box-shadow:
+        0 18px 40px rgba(17, 20, 57, 0.08);
+}
+
+
+/* ============================================================
+   FEATURE
+============================================================ */
+
+.feature {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 8px 0;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.feature:hover {
+    transform: translateX(4px);
+}
+
+
+/* ============================================================
+   FEATURE ICON
+============================================================ */
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111439,
+            #5D66C8
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 8px 18px rgba(17, 20, 57, 0.18);
+
+    transition:
+        transform 0.3s ease;
+}
+
+
+.feature:hover .feature-icon {
+    transform:
+        rotate(-8deg)
+        scale(1.08);
+}
+
+
+/* ============================================================
+   FEATURE TITLE
+============================================================ */
+
+.feature-title {
+    font-size: 14px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    margin-bottom: 2px;
+}
+
+
+/* ============================================================
+   FEATURE TEXT
+============================================================ */
+
+.feature-text {
+    font-size: 12px;
+
+    color: #666B86;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   RESPONSIVE - TABLET
+============================================================ */
+
+@media (max-width: 1024px) {
+
+    .hero {
+        padding: 44px 40px;
+
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+
+    .hero-description {
+        margin-left: auto;
+
+        margin-right: auto;
+    }
+
+
+    .hero-visual {
+        display: none;
+    }
+
+
+    .hero-title {
+        font-size: 42px;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE - MOBILE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    .home-wrap {
+        gap: 30px;
+    }
+
+
+    .hero {
+        padding: 36px 24px;
+
+        border-radius: 30px;
+    }
+
+
+    .hero-title {
+        font-size: 32px;
+
+        letter-spacing: -0.8px;
+    }
+
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+
+    .section-title {
+        font-size: 22px;
+    }
+
+
+    .product-grid {
+        grid-template-columns:
+            repeat(
+                auto-fill,
+                minmax(160px, 1fr)
+            );
+
+        gap: 16px;
+    }
+
+
+    .categories {
+        gap: 8px;
+    }
+
+
+    .category-pill {
+        padding: 10px 16px;
+
+        font-size: 13px;
+    }
+
+
+    .features {
+        padding: 20px;
+
+        gap: 14px;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE - SMALL MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+
+    .hero-title {
+        font-size: 28px;
+    }
+
+
+    .hero-badge {
+        font-size: 11px;
+
+        padding: 8px 15px;
+    }
+
+
+    .shop-btn {
+        padding: 13px 26px;
+
+        font-size: 14px;
+    }
+
+
+    .product-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 12px;
+    }
+
+
+    .product-image {
+        height: 130px;
+    }
+
+
+    .product-emoji {
+        font-size: 44px;
+    }
+
+
+    .product-info {
+        padding: 12px 12px 14px;
+    }
+
+
+    .product-name {
+        font-size: 14px;
+    }
+
+
+    .product-price {
+        font-size: 15px;
+    }
+
+
+    .view-product {
+        padding: 9px;
+
+        font-size: 12px;
+    }
+
+
+    .section-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+    }
+
+
+    .view-all {
+        font-size: 12px;
+
+        padding: 8px 14px;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="home-wrap">
+
+
+    <!-- ======================================================
+         HERO SECTION
+    ======================================================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                Smart Inventory Management
+            </div>
+
+
+            <h1 class="hero-title">
+
+                Smarter Decisions with
+
+                <span>
+                    Backorder AI
+                </span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Predict backorders, manage stock, and keep your
+                business running smoothly with the power of AI.
+
+            </p>
+
+
+            <a
+                href="{% url 'products' %}"
+                class="shop-btn"
+            >
+                Shop Now
+            </a>
+
+        </div>
+
+
+        <!-- ==================================================
+             AI VISUAL
+        =================================================== -->
+
+        <div class="hero-visual">
+
+            <div class="ai-card">
+
+                <div class="ai-card-header">
+
+                    <span class="ai-card-title">
+                        AI Prediction
+                    </span>
+
+                    <span class="ai-dot"></span>
+
+                </div>
+
+
+                <div class="ai-status">
+                    No Backorder
+                </div>
+
+
+                <div class="mini-chart">
+
+                    <div class="bar"></div>
+
+                    <div class="bar"></div>
+
+                    <div class="bar"></div>
+
+                    <div class="bar"></div>
+
+                    <div class="bar"></div>
+
+                </div>
+
+
+                <div class="ai-metric">
+
+                    <span>
+                        Accuracy
+                        <strong>98.2%</strong>
+                    </span>
+
+                    <span>
+                        Stock
+                        <strong>1.2k</strong>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         CATEGORIES
+    ======================================================= -->
+
+    <section class="categories">
+
+        <div class="category-pill">
+            <span class="cat-icon">▦</span>
+            Electronics
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">👕</span>
+            Fashion
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">⌂</span>
+            Home
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">🧸</span>
+            Kids
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">♧</span>
+            Bags
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">⚽</span>
+            Sports
+        </div>
+
+
+        <div class="category-pill">
+            <span class="cat-icon">★</span>
+            Accessories
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         PRODUCTS
+    ======================================================= -->
+
+    <section>
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    Popular Products
+                </h2>
+
+                <p class="section-subtitle">
+                    Top trending products you'll love
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'products' %}"
+                class="view-all"
+            >
+                View All Products →
+            </a>
+
+        </div>
+
+
+        <div class="product-grid">
+
+            {% for product in products %}
+
+            <div class="product-card">
+
+
+                <!-- ==========================================
+                     PRODUCT IMAGE
+                =========================================== -->
+
+                <div class="product-image">
+
+
+                    {% if product.name == "Toy" %}
+
+                        <img
+                            src="{% static 'images/toy.png' %}"
+                            alt="Toy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🧸
+                        </span>
+
+
+                    {% elif product.name == "Helmet" %}
+
+                        <img
+                            src="{% static 'images/helmet.png' %}"
+                            alt="Helmet"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🪖
+                        </span>
+
+
+                    {% elif product.name == "Backpack" %}
+
+                        <img
+                            src="{% static 'images/bag.png' %}"
+                            alt="Backpack"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🎒
+                        </span>
+
+
+                    {% elif product.name == "Water Bottle" %}
+
+                        <img
+                            src="{% static 'images/bottle.png' %}"
+                            alt="Water Bottle"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🧴
+                        </span>
+
+
+                    {% elif product.name == "Smartphone" %}
+
+                        <img
+                            src="{% static 'images/phone.png' %}"
+                            alt="Smartphone"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            📱
+                        </span>
+
+
+                    {% elif product.name == "Smart Watch" %}
+
+                        <img
+                            src="{% static 'images/watch.png' %}"
+                            alt="Smart Watch"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            ⌚
+                        </span>
+
+
+                    {% elif product.name == "Perfume" %}
+
+                        <img
+                            src="{% static 'images/perfume.png' %}"
+                            alt="Perfume"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🧴
+                        </span>
+
+
+                    {% elif product.name == "Headphones" %}
+
+                        <img
+                            src="{% static 'images/Headphones.png' %}"
+                            alt="Headphones"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🎧
+                        </span>
+
+
+                    {% elif product.name == "Laptop" %}
+
+                        <img
+                            src="{% static 'images/laptop.png' %}"
+                            alt="Laptop"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            💻
+                        </span>
+
+
+                    {% elif product.name == "Cricket Bat" %}
+
+                        <img
+                            src="{% static 'images/cricket_bat.png' %}"
+                            alt="Cricket Bat"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <span
+                            class="product-emoji"
+                            style="display:none;"
+                        >
+                            🏏
+                        </span>
+
+
+                    {% else %}
+
+                        <span class="product-emoji">
+                            🛍️
+                        </span>
+
+                    {% endif %}
+
+
+                    <!-- CATEGORY -->
+
+                    <span class="product-category-tag">
+                        {{ product.category }}
+                    </span>
+
+
+                    <!-- HEART -->
+
+                    <span class="heart-icon">
+                        ♡
+                    </span>
+
+                </div>
+
+
+                <!-- ==========================================
+                     PRODUCT INFO
+                =========================================== -->
+
+                <div class="product-info">
+
+
+                    <div class="product-name">
+                        {{ product.name }}
+                    </div>
+
+
+                    <div class="product-price">
+                        ₹{{ product.price }}
+                    </div>
+
+
+                    <div class="stock">
+
+                        <span class="stock-dot"></span>
+
+                        In Stock ({{ product.stock }})
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'product_detail' product.id %}"
+                        class="view-product"
+                    >
+                        View Product
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+                <p style="color: #666B86;">
+                    No products available.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         FEATURES
+    ======================================================= -->
+
+    <section class="features">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🚚
+            </div>
+
+            <div>
+
+                <div class="feature-title">
+                    Fast &amp; Reliable
+                </div>
+
+                <div class="feature-text">
+                    Get your products on time
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <div class="feature-title">
+                    Secure Payments
+                </div>
+
+                <div class="feature-text">
+                    100% safe &amp; secure
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <div class="feature-title">
+                    AI Powered
+                </div>
+
+                <div class="feature-text">
+                    Smarter predictions, better stock
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🎧
+            </div>
+
+            <div>
+
+                <div class="feature-title">
+                    24/7 Support
+                </div>
+
+                <div class="feature-text">
+                    We're here to help
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+</div>
+
+{% endblock %}

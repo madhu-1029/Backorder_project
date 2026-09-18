@@ -1,0 +1,1074 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Product | Backorder AI{% endblock %}
+
+{% block page_title %}Edit Product{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* ============================================================
+   WHITE LILAC + DARK BLUE THEME
+
+   Background     : #F8F8F9
+   Dark Blue      : #111439
+   Deep Blue      : #252A68
+   Indigo         : #5D66C8
+   Light Lilac    : #EEF0FF
+   Border         : #E4E5EF
+   Text           : #111439
+   Muted Text     : #666B86
+============================================================ */
+
+
+/* ---------- PAGE WRAPPER ---------- */
+
+.edit-page {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+
+/* ---------- EDIT CARD ---------- */
+
+.edit-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #E4E5EF;
+    border-radius: 32px;
+
+    padding: 44px 48px;
+
+    box-shadow:
+        0 30px 70px rgba(17, 20, 57, 0.10),
+        0 10px 30px rgba(17, 20, 57, 0.06);
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* ---------- TOP BLUE GLOW ---------- */
+
+.edit-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -140px;
+    right: -140px;
+
+    width: 400px;
+    height: 400px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(93, 102, 200, 0.14),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ---------- BOTTOM LILAC GLOW ---------- */
+
+.edit-card::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: -180px;
+    left: -180px;
+
+    width: 420px;
+    height: 420px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(37, 42, 104, 0.08),
+            transparent 70%
+        );
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* ---------- HEADER ---------- */
+
+.edit-title {
+    margin-bottom: 38px;
+
+    position: relative;
+    z-index: 1;
+
+    text-align: center;
+}
+
+
+/* ---------- BADGE ---------- */
+
+.edit-title .badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    background: #EEF0FF;
+    color: #111439;
+
+    padding: 8px 20px;
+
+    border-radius: 40px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 16px;
+
+    border: 1px solid #DDE1FF;
+
+    box-shadow:
+        0 6px 18px rgba(17, 20, 57, 0.07);
+}
+
+
+.edit-title .badge::before {
+    content: "✏️";
+
+    font-size: 13px;
+}
+
+
+/* ---------- MAIN TITLE ---------- */
+
+.edit-title h1 {
+    font-size: 34px;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+
+    margin: 0 0 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 55%,
+            #5D66C8
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background-clip: text;
+}
+
+
+/* ---------- DESCRIPTION ---------- */
+
+.edit-title p {
+    color: #666B86;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    margin: 0;
+}
+
+
+/* ---------- SECTION HEADINGS ---------- */
+
+.section-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 36px 0 20px;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+.section-heading:first-of-type {
+    margin-top: 0;
+}
+
+
+/* ---------- SECTION ICON ---------- */
+
+.section-heading .icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #111439,
+            #252A68
+        );
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    box-shadow:
+        0 10px 22px rgba(17, 20, 57, 0.20);
+
+    flex-shrink: 0;
+}
+
+
+/* ---------- SECTION TITLE ---------- */
+
+.section-heading h3 {
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    color: #111439;
+
+    letter-spacing: -0.3px;
+}
+
+
+/* ---------- SECTION LINE ---------- */
+
+.section-heading .line {
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #D9DCF2,
+            transparent
+        );
+
+    margin-left: 8px;
+}
+
+
+/* ---------- FORM GRID ---------- */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px 24px;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ---------- FORM GROUP ---------- */
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+
+/* ---------- LABEL ---------- */
+
+.form-group label {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 9px;
+
+    color: #111439;
+
+    letter-spacing: 0.2px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* ---------- LABEL DOT ---------- */
+
+.form-group label::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #252A68,
+            #5D66C8
+        );
+
+    border-radius: 50%;
+
+    display: inline-block;
+
+    box-shadow:
+        0 2px 7px rgba(37, 42, 104, 0.30);
+}
+
+
+/* ---------- INPUT / TEXTAREA / SELECT ---------- */
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+
+    padding: 14px 18px;
+
+    border: 1px solid #E2E4F0;
+
+    border-radius: 16px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    background: #FFFFFF;
+
+    color: #111439;
+
+    font-weight: 500;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 4px 12px rgba(17, 20, 57, 0.04);
+}
+
+
+/* ---------- PLACEHOLDER ---------- */
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9A9DB2;
+
+    font-weight: 400;
+}
+
+
+/* ---------- HOVER ---------- */
+
+.form-group input:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    background: #FBFBFF;
+
+    border-color: #C9CDF0;
+}
+
+
+/* ---------- FOCUS ---------- */
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    background: #FFFFFF;
+
+    border-color: #5D66C8;
+
+    box-shadow:
+        0 0 0 4px rgba(93, 102, 200, 0.12),
+        0 8px 20px rgba(17, 20, 57, 0.07);
+
+    transform: translateY(-1px);
+}
+
+
+/* ---------- TEXTAREA ---------- */
+
+.form-group textarea {
+    min-height: 110px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+
+/* ---------- FORM BUTTON AREA ---------- */
+
+.form-buttons {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 14px;
+
+    margin-top: 40px;
+
+    padding-top: 28px;
+
+    border-top: 1px dashed #DDE0EE;
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* ---------- CANCEL BUTTON ---------- */
+
+.cancel-btn {
+    padding: 14px 32px;
+
+    border-radius: 40px;
+
+    background: #F2F3FA;
+
+    color: #111439;
+
+    border: 1px solid #E0E2EF;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    transition: all 0.25s ease;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+        0 6px 16px rgba(17, 20, 57, 0.05);
+}
+
+
+/* ---------- CANCEL HOVER ---------- */
+
+.cancel-btn:hover {
+    background: #E8EAFA;
+
+    color: #111439;
+
+    transform: translateY(-2px);
+
+    border-color: #C9CDF0;
+
+    box-shadow:
+        0 12px 24px rgba(17, 20, 57, 0.10);
+}
+
+
+/* ---------- SAVE BUTTON ---------- */
+
+.save-btn {
+    padding: 15px 38px;
+
+    border-radius: 40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111439,
+            #252A68 55%,
+            #5D66C8
+        );
+
+    color: #FFFFFF;
+
+    border: none;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    font-family: inherit;
+
+    box-shadow:
+        0 14px 30px rgba(17, 20, 57, 0.25),
+        0 6px 15px rgba(93, 102, 200, 0.20);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* ---------- SAVE BUTTON SHINE ---------- */
+
+.save-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.25),
+            transparent
+        );
+
+    transition: left 0.7s ease;
+}
+
+
+.save-btn:hover::before {
+    left: 100%;
+}
+
+
+/* ---------- SAVE HOVER ---------- */
+
+.save-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 20px 40px rgba(17, 20, 57, 0.30),
+        0 10px 25px rgba(93, 102, 200, 0.25);
+}
+
+
+/* ---------- SAVE ACTIVE ---------- */
+
+.save-btn:active {
+    transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    .edit-card {
+        padding: 30px 24px;
+
+        border-radius: 28px;
+    }
+
+
+    .edit-title h1 {
+        font-size: 26px;
+    }
+
+
+    .form-grid {
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+
+    .form-buttons {
+        flex-direction: column-reverse;
+    }
+
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+
+        padding: 14px 24px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .edit-card {
+        padding: 24px 18px;
+    }
+
+
+    .edit-title h1 {
+        font-size: 22px;
+    }
+
+
+    .edit-title p {
+        font-size: 13px;
+    }
+
+
+    .section-heading .icon {
+        width: 38px;
+        height: 38px;
+
+        font-size: 18px;
+
+        border-radius: 12px;
+    }
+
+
+    .section-heading h3 {
+        font-size: 15px;
+    }
+
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 12px 14px;
+
+        font-size: 14px;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="edit-page">
+
+    <div class="edit-card">
+
+        <!-- ---------- HEADER ---------- -->
+
+        <div class="edit-title">
+
+            <div class="badge">
+                Update Item
+            </div>
+
+            <h1>
+                Edit Product
+            </h1>
+
+            <p>
+                Update product details and inventory information.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- ---------- BASIC DETAILS ---------- -->
+
+            <div class="section-heading">
+
+                <div class="icon">
+                    📦
+                </div>
+
+                <h3>
+                    Basic Details
+                </h3>
+
+                <div class="line"></div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ product.name }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ product.category }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Price
+                    </label>
+
+                    <input
+                        type="number"
+                        name="price"
+                        value="{{ product.price }}"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock"
+                        value="{{ product.stock }}"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                    >{{ product.description }}</textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- ---------- SUPPLY & FORECAST ---------- -->
+
+            <div class="section-heading">
+
+                <div class="icon">
+                    📊
+                </div>
+
+                <h3>
+                    Supply &amp; Forecast
+                </h3>
+
+                <div class="line"></div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Lead Time
+                    </label>
+
+                    <input
+                        type="number"
+                        name="lead_time"
+                        value="{{ product.lead_time }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        In Transit Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        name="in_transit_qty"
+                        value="{{ product.in_transit_qty }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        3 Month Forecast
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_3_month"
+                        value="{{ product.forecast_3_month }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        6 Month Forecast
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_6_month"
+                        value="{{ product.forecast_6_month }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        9 Month Forecast
+                    </label>
+
+                    <input
+                        type="number"
+                        name="forecast_9_month"
+                        value="{{ product.forecast_9_month }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Minimum Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        name="min_bank"
+                        value="{{ product.min_bank }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Pieces Past Due
+                    </label>
+
+                    <input
+                        type="number"
+                        name="pieces_past_due"
+                        value="{{ product.pieces_past_due }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ---------- SALES & PERFORMANCE ---------- -->
+
+            <div class="section-heading">
+
+                <div class="icon">
+                    📈
+                </div>
+
+                <h3>
+                    Sales &amp; Performance
+                </h3>
+
+                <div class="line"></div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Sales - 1 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="sales_1_month"
+                        value="{{ product.sales_1_month }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Sales - 3 Months
+                    </label>
+
+                    <input
+                        type="number"
+                        name="sales_3_month"
+                        value="{{ product.sales_3_month }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Performance - 6 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="perf_6_month_avg"
+                        value="{{ product.perf_6_month_avg }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Performance - 12 Month
+                    </label>
+
+                    <input
+                        type="number"
+                        name="perf_12_month_avg"
+                        value="{{ product.perf_12_month_avg }}"
+                        step="0.01"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ---------- BUTTONS ---------- -->
+
+            <div class="form-buttons">
+
+                <a
+                    href="{% url 'admin_dashboard' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    💾 Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1974 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Shopping Cart | Backorder AI{% endblock %}
+
+{% block page_title %}Shopping Cart{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    /* ============================================================
+       WHITE LILAC + DARK BLUE THEME
+    ============================================================ */
+
+    .cart-page {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding-bottom: 20px;
+    }
+
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+
+    .cart-header {
+        text-align: center;
+        margin-bottom: 36px;
+    }
+
+    .cart-header .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ECECF8,
+                #E4E5F5
+            );
+
+        color: #303779;
+
+        padding: 8px 20px;
+
+        border-radius: 40px;
+
+        font-size: 12px;
+        font-weight: 800;
+
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+
+        margin-bottom: 14px;
+
+        border: 1px solid #DDDEED;
+
+        box-shadow:
+            0 8px 18px -10px
+            rgba(17, 20, 57, 0.18);
+    }
+
+    .cart-header .badge::before {
+        content: "✦";
+        color: #777DD6;
+    }
+
+    .cart-header h1 {
+        font-size: 36px;
+        font-weight: 800;
+
+        letter-spacing: -1px;
+
+        margin: 0 0 8px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #111439 0%,
+                #303779 65%,
+                #777DD6 100%
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .cart-header p {
+        color: #777B96;
+
+        font-size: 15px;
+        font-weight: 500;
+
+        margin: 0;
+    }
+
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+
+    .cart-layout {
+        display: grid;
+
+        grid-template-columns:
+            2fr 1fr;
+
+        gap: 24px;
+
+        align-items: start;
+    }
+
+
+    /* ============================================================
+       CART ITEMS CARD
+    ============================================================ */
+
+    .cart-items-card {
+
+        background:
+            linear-gradient(
+                145deg,
+                #FFFFFF 0%,
+                #FCFCFF 55%,
+                #F5F5FC 100%
+            );
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border:
+            1px solid #E2E3EF;
+
+        border-radius: 32px;
+
+        padding: 28px 30px;
+
+        box-shadow:
+
+            0 24px 50px -24px
+            rgba(17, 20, 57, 0.16),
+
+            0 8px 20px -10px
+            rgba(17, 20, 57, 0.08),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.9);
+    }
+
+
+    /* ============================================================
+       CARD TITLE
+    ============================================================ */
+
+    .cart-card-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        margin-bottom: 22px;
+
+        padding-bottom: 20px;
+
+        border-bottom:
+            1px dashed #D9DAE8;
+    }
+
+    .cart-card-title .icon {
+
+        width: 46px;
+        height: 46px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #111439,
+                #303779 60%,
+                #777DD6
+            );
+
+        border-radius: 16px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+
+        box-shadow:
+
+            0 10px 20px -8px
+            rgba(17, 20, 57, 0.35),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.2);
+    }
+
+    .cart-card-title h2 {
+
+        margin: 0;
+
+        color: #111439;
+
+        font-size: 19px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.3px;
+    }
+
+
+    /* ============================================================
+       CART ITEM
+    ============================================================ */
+
+    .cart-item {
+
+        display: grid;
+
+        grid-template-columns:
+            100px
+            minmax(140px, 1fr)
+            130px
+            120px
+            100px;
+
+        gap: 18px;
+
+        align-items: center;
+
+        padding: 22px 10px;
+
+        border-top:
+            1px solid #ECECF3;
+
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease;
+
+        border-radius: 16px;
+    }
+
+    .cart-item:first-of-type {
+        border-top: none;
+    }
+
+    .cart-item:hover {
+
+        background:
+            linear-gradient(
+                135deg,
+                #F8F8FD,
+                #F1F2FA
+            );
+
+        transform:
+            translateY(-1px);
+    }
+
+
+    /* ============================================================
+       PRODUCT IMAGE
+    ============================================================ */
+
+    .cart-product-image {
+
+        width: 100px;
+        height: 100px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #F0F1F9,
+                #E5E6F3
+            );
+
+        border:
+            1px solid #DDDEEA;
+
+        border-radius: 20px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        box-shadow:
+
+            0 10px 20px -10px
+            rgba(17, 20, 57, 0.18),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.9);
+
+        transition:
+            transform 0.3s ease;
+
+        position: relative;
+    }
+
+    .cart-product-image::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        width: 90px;
+        height: 90px;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(119, 125, 214, 0.18),
+                transparent 70%
+            );
+
+        border-radius: 50%;
+
+        transform:
+            translate(-50%, -50%);
+
+        filter: blur(12px);
+
+        pointer-events: none;
+    }
+
+    .cart-item:hover
+    .cart-product-image {
+
+        transform:
+            scale(1.04);
+    }
+
+    .cart-product-image img {
+
+        position: relative;
+
+        z-index: 1;
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: contain;
+
+        padding: 10px;
+
+        filter:
+            drop-shadow(
+                0 8px 12px
+                rgba(17, 20, 57, 0.18)
+            );
+    }
+
+    .cart-product-icon {
+
+        position: relative;
+
+        z-index: 1;
+
+        font-size: 42px;
+
+        filter:
+            drop-shadow(
+                0 6px 10px
+                rgba(17, 20, 57, 0.18)
+            );
+    }
+
+
+    /* ============================================================
+       PRODUCT DETAILS
+    ============================================================ */
+
+    .cart-product-details h3 {
+
+        margin: 0 0 6px;
+
+        font-size: 17px;
+
+        font-weight: 700;
+
+        color: #111439;
+
+        letter-spacing: -0.2px;
+    }
+
+    .cart-product-category {
+
+        display: inline-block;
+
+        color: #454A83;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ECECF8,
+                #E4E5F4
+            );
+
+        border:
+            1px solid #DCDDEC;
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        padding:
+            4px 11px;
+
+        border-radius: 20px;
+
+        margin-bottom: 8px;
+
+        letter-spacing: 0.5px;
+
+        text-transform: uppercase;
+    }
+
+    .cart-product-price {
+
+        font-size: 14px;
+
+        color: #777B96;
+
+        font-weight: 600;
+    }
+
+
+    /* ============================================================
+       QUANTITY
+    ============================================================ */
+
+    .quantity-title,
+    .subtotal-title {
+
+        font-size: 10px;
+
+        color: #8589A1;
+
+        font-weight: 800;
+
+        letter-spacing: 0.8px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 8px;
+    }
+
+    .quantity-box {
+
+        display: flex;
+
+        align-items: center;
+
+        width: fit-content;
+
+        border-radius: 14px;
+
+        overflow: hidden;
+
+        background: #F0F1F8;
+
+        border:
+            1px solid #DCDD EA;
+
+        box-shadow:
+
+            inset 0 2px 6px
+            rgba(17, 20, 57, 0.06),
+
+            0 4px 10px -6px
+            rgba(17, 20, 57, 0.15);
+
+        transition:
+            box-shadow 0.25s ease;
+    }
+
+    .quantity-box:hover {
+
+        box-shadow:
+
+            0 0 0 3px
+            rgba(119, 125, 214, 0.10),
+
+            0 6px 14px -6px
+            rgba(17, 20, 57, 0.16);
+    }
+
+    .quantity-box a {
+
+        width: 36px;
+
+        height: 36px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        text-decoration: none;
+
+        color: #303779;
+
+        background: transparent;
+
+        font-size: 18px;
+
+        font-weight: 700;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .quantity-box a:hover {
+
+        background:
+            linear-gradient(
+                135deg,
+                #111439,
+                #555CB0
+            );
+
+        color: #FFFFFF;
+    }
+
+    .quantity-number {
+
+        width: 42px;
+
+        height: 36px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        color: #111439;
+
+        font-weight: 800;
+
+        font-size: 15px;
+
+        border-left:
+            1px solid #D8D9E6;
+
+        border-right:
+            1px solid #D8D9E6;
+    }
+
+
+    /* ============================================================
+       SUBTOTAL
+    ============================================================ */
+
+    .subtotal-price {
+
+        color: #111439;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.3px;
+    }
+
+
+    /* ============================================================
+       REMOVE BUTTON
+    ============================================================ */
+
+    .remove-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        background:
+            #FFF0F2;
+
+        border:
+            1px solid #F4D5D9;
+
+        color: #C94F5D;
+
+        padding:
+            10px 14px;
+
+        border-radius: 12px;
+
+        text-decoration: none;
+
+        font-size: 12px;
+
+        font-weight: 800;
+
+        transition:
+            all 0.25s ease;
+
+        white-space: nowrap;
+    }
+
+    .remove-btn:hover {
+
+        background:
+            linear-gradient(
+                135deg,
+                #C94F5D,
+                #A93645
+            );
+
+        color: #FFFFFF;
+
+        transform:
+            translateY(-2px);
+
+        box-shadow:
+
+            0 10px 20px -6px
+            rgba(201, 79, 93, 0.28);
+    }
+
+
+    /* ============================================================
+       CONTINUE SHOPPING
+    ============================================================ */
+
+    .continue-shopping {
+
+        margin-top: 22px;
+
+        padding-top: 20px;
+
+        border-top:
+            1px dashed #D9DAE8;
+    }
+
+    .continue-shopping a {
+
+        color: #303779;
+
+        text-decoration: none;
+
+        font-weight: 800;
+
+        font-size: 14px;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        transition:
+            gap 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .continue-shopping a:hover {
+
+        gap: 10px;
+
+        color: #111439;
+    }
+
+
+    /* ============================================================
+       SUMMARY CARD
+    ============================================================ */
+
+    .summary-card {
+
+        background:
+            linear-gradient(
+                145deg,
+                #FFFFFF 0%,
+                #F8F8FD 55%,
+                #F0F1FA 100%
+            );
+
+        backdrop-filter:
+            blur(24px);
+
+        -webkit-backdrop-filter:
+            blur(24px);
+
+        border:
+            1px solid #DCDDEA;
+
+        border-radius: 32px;
+
+        padding: 28px;
+
+        box-shadow:
+
+            0 24px 50px -20px
+            rgba(17, 20, 57, 0.18),
+
+            0 8px 20px -10px
+            rgba(17, 20, 57, 0.08);
+
+        position: sticky;
+
+        top: 20px;
+
+        overflow: hidden;
+    }
+
+    .summary-card::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: -80px;
+
+        right: -80px;
+
+        width: 220px;
+
+        height: 220px;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(119, 125, 214, 0.16),
+                transparent 70%
+            );
+
+        border-radius: 50%;
+
+        pointer-events: none;
+    }
+
+
+    /* ============================================================
+       SUMMARY TITLE
+    ============================================================ */
+
+    .summary-title {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        margin-bottom: 22px;
+
+        padding-bottom: 20px;
+
+        border-bottom:
+            1px dashed #D9DAE8;
+
+        position: relative;
+
+        z-index: 1;
+    }
+
+    .summary-icon {
+
+        width: 46px;
+        height: 46px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #111439,
+                #303779 60%,
+                #777DD6
+            );
+
+        border-radius: 16px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+
+        box-shadow:
+
+            0 8px 18px -6px
+            rgba(17, 20, 57, 0.30),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.2);
+    }
+
+    .summary-title h2 {
+
+        margin: 0;
+
+        font-size: 19px;
+
+        font-weight: 800;
+
+        color: #111439;
+
+        letter-spacing: -0.3px;
+    }
+
+
+    /* ============================================================
+       SUMMARY ROW
+    ============================================================ */
+
+    .summary-row {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 14px 0;
+
+        border-bottom:
+            1px solid #E8E9F1;
+
+        color: #777B96;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        position: relative;
+
+        z-index: 1;
+    }
+
+    .summary-row strong {
+
+        color: #111439;
+
+        font-weight: 800;
+
+        font-size: 15px;
+    }
+
+
+    /* ============================================================
+       FREE DELIVERY
+    ============================================================ */
+
+    .summary-row .free-tag {
+
+        color: #27834C;
+
+        background:
+            #EAF8EF;
+
+        border:
+            1px solid #D1EEDB;
+
+        padding:
+            4px 11px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.4px;
+    }
+
+
+    /* ============================================================
+       TOTAL
+    ============================================================ */
+
+    .total-row {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding:
+            22px 0 20px;
+
+        position: relative;
+
+        z-index: 1;
+    }
+
+    .total-row span:first-child {
+
+        color: #111439;
+
+        font-size: 16px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.2px;
+    }
+
+    .total-price {
+
+        font-size: 26px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.8px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #111439,
+                #303779 65%,
+                #777DD6
+            );
+
+        -webkit-background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+
+        background-clip: text;
+    }
+
+
+    /* ============================================================
+       CHECKOUT BUTTON
+    ============================================================ */
+
+    .checkout-btn {
+
+        display: block;
+
+        width: 100%;
+
+        box-sizing: border-box;
+
+        background:
+            linear-gradient(
+                135deg,
+                #111439 0%,
+                #252A68 55%,
+                #777DD6 100%
+            );
+
+        color: #FFFFFF;
+
+        text-align: center;
+
+        padding: 16px;
+
+        border-radius: 40px;
+
+        text-decoration: none;
+
+        font-size: 15px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.3px;
+
+        box-shadow:
+
+            0 18px 36px -10px
+            rgba(17, 20, 57, 0.35),
+
+            0 8px 20px -8px
+            rgba(119, 125, 214, 0.25),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.25);
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+
+        position: relative;
+
+        z-index: 1;
+
+        overflow: hidden;
+    }
+
+    .checkout-btn::before {
+
+        content: "";
+
+        position: absolute;
+
+        top: 0;
+
+        left: -100%;
+
+        width: 100%;
+
+        height: 100%;
+
+        background:
+            linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.30),
+                transparent
+            );
+
+        transition:
+            left 0.7s ease;
+    }
+
+    .checkout-btn:hover::before {
+
+        left: 100%;
+    }
+
+    .checkout-btn:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+
+            0 26px 46px -10px
+            rgba(17, 20, 57, 0.38),
+
+            0 12px 28px -8px
+            rgba(119, 125, 214, 0.28);
+    }
+
+
+    /* ============================================================
+       SECURE CHECKOUT
+    ============================================================ */
+
+    .secure-checkout {
+
+        margin-top: 24px;
+
+        padding-top: 22px;
+
+        text-align: center;
+
+        position: relative;
+
+        z-index: 1;
+
+        border-top:
+            1px dashed #D9DAE8;
+    }
+
+    .secure-icon {
+
+        font-size: 22px;
+
+        margin-bottom: 8px;
+
+        filter:
+            drop-shadow(
+                0 4px 8px
+                rgba(17, 20, 57, 0.15)
+            );
+    }
+
+    .secure-checkout h4 {
+
+        margin: 0;
+
+        color: #303354;
+
+        font-size: 13px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.3px;
+    }
+
+    .secure-checkout p {
+
+        margin: 5px 0 0;
+
+        color: #8589A1;
+
+        font-size: 12px;
+
+        font-weight: 500;
+    }
+
+
+    /* ============================================================
+       EMPTY CART
+    ============================================================ */
+
+    .empty-cart {
+
+        background:
+            linear-gradient(
+                145deg,
+                #FFFFFF,
+                #F5F5FC
+            );
+
+        backdrop-filter:
+            blur(16px);
+
+        -webkit-backdrop-filter:
+            blur(16px);
+
+        border:
+            1px solid #E0E1ED;
+
+        border-radius: 32px;
+
+        padding:
+            80px 25px;
+
+        text-align: center;
+
+        box-shadow:
+
+            0 30px 60px -24px
+            rgba(17, 20, 57, 0.18);
+    }
+
+
+    .empty-cart-icon {
+
+        width: 100px;
+
+        height: 100px;
+
+        margin:
+            0 auto 22px;
+
+        background:
+            linear-gradient(
+                145deg,
+                #111439,
+                #303779 60%,
+                #777DD6
+            );
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 46px;
+
+        box-shadow:
+
+            0 18px 36px -12px
+            rgba(17, 20, 57, 0.30),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.2);
+
+        animation:
+            floatIcon 3s ease-in-out infinite;
+    }
+
+
+    @keyframes floatIcon {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+
+
+    .empty-cart h2 {
+
+        margin:
+            0 0 10px;
+
+        color: #111439;
+
+        font-size: 26px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.5px;
+    }
+
+
+    .empty-cart p {
+
+        color: #777B96;
+
+        margin:
+            0 0 28px;
+
+        font-size: 15px;
+
+        font-weight: 500;
+    }
+
+
+    /* ============================================================
+       SHOP NOW BUTTON
+    ============================================================ */
+
+    .shop-now-btn {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #111439 0%,
+                #303779 55%,
+                #777DD6 100%
+            );
+
+        color: #FFFFFF;
+
+        padding:
+            14px 32px;
+
+        border-radius: 40px;
+
+        text-decoration: none;
+
+        font-weight: 800;
+
+        font-size: 15px;
+
+        letter-spacing: 0.3px;
+
+        box-shadow:
+
+            0 18px 32px -10px
+            rgba(17, 20, 57, 0.32),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, 0.25);
+
+        transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+    }
+
+
+    .shop-now-btn:hover {
+
+        transform:
+            translateY(-3px);
+
+        box-shadow:
+
+            0 24px 40px -10px
+            rgba(17, 20, 57, 0.38),
+
+            0 10px 24px -8px
+            rgba(119, 125, 214, 0.28);
+    }
+
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+
+    @media (max-width: 1100px) {
+
+        .cart-item {
+
+            grid-template-columns:
+                90px
+                1fr
+                110px
+                100px
+                90px;
+
+            gap: 14px;
+        }
+
+
+        .cart-product-image {
+
+            width: 90px;
+
+            height: 90px;
+        }
+    }
+
+
+    @media (max-width: 900px) {
+
+        .cart-layout {
+
+            grid-template-columns:
+                1fr;
+        }
+
+
+        .summary-card {
+
+            position: static;
+        }
+    }
+
+
+    @media (max-width: 700px) {
+
+        .cart-header h1 {
+
+            font-size: 28px;
+        }
+
+
+        .cart-items-card,
+        .summary-card {
+
+            padding:
+                22px 20px;
+
+            border-radius:
+                26px;
+        }
+
+
+        .cart-item {
+
+            grid-template-columns:
+                80px 1fr;
+
+            gap: 14px;
+
+            padding:
+                18px 0;
+        }
+
+
+        .cart-product-image {
+
+            width: 80px;
+
+            height: 80px;
+
+            grid-row:
+                span 4;
+
+            align-self:
+                flex-start;
+        }
+
+
+        .cart-product-details {
+
+            grid-column:
+                2;
+        }
+
+
+        .cart-item >
+        div:not(.cart-product-image):not(.cart-product-details) {
+
+            grid-column:
+                2;
+        }
+
+
+        .quantity-box,
+        .subtotal-price,
+        .remove-btn {
+
+            margin-top:
+                2px;
+        }
+
+
+        .remove-btn {
+
+            justify-content:
+                center;
+
+            width:
+                fit-content;
+        }
+    }
+
+
+    @media (max-width: 480px) {
+
+        .cart-header h1 {
+
+            font-size:
+                24px;
+        }
+
+
+        .cart-product-details h3 {
+
+            font-size:
+                15px;
+        }
+
+
+        .total-price {
+
+            font-size:
+                22px;
+        }
+
+
+        .empty-cart {
+
+            padding:
+                60px 20px;
+        }
+
+
+        .empty-cart h2 {
+
+            font-size:
+                20px;
+        }
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="cart-page">
+
+
+    <!-- ============================================================
+         HEADER
+    ============================================================ -->
+
+    <div class="cart-header">
+
+        <div class="badge">
+            Your Selection
+        </div>
+
+        <h1>
+            Shopping Cart
+        </h1>
+
+        <p>
+            Review your items and proceed to checkout
+        </p>
+
+    </div>
+
+
+    {% if cart_products %}
+
+
+    <div class="cart-layout">
+
+
+        <!-- ========================================================
+             CART ITEMS
+        ======================================================== -->
+
+        <div class="cart-items-card">
+
+
+            <div class="cart-card-title">
+
+                <div class="icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Cart Items ({{ cart_products|length }})
+                </h2>
+
+            </div>
+
+
+            {% for item in cart_products %}
+
+
+            <div class="cart-item">
+
+
+                <!-- PRODUCT IMAGE -->
+
+                <div class="cart-product-image">
+
+
+                    {% if item.product.name == "Toy" %}
+
+                        <img
+                            src="{% static 'images/toy.png' %}"
+                            alt="Toy"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            🧸
+                        </div>
+
+
+                    {% elif item.product.name == "Helmet" %}
+
+                        <img
+                            src="{% static 'images/helmet.png' %}"
+                            alt="Helmet"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            🪖
+                        </div>
+
+
+                    {% elif item.product.name == "Backpack" %}
+
+                        <img
+                            src="{% static 'images/bag.png' %}"
+                            alt="Backpack"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            🎒
+                        </div>
+
+
+                    {% elif item.product.name == "Bag" %}
+
+                        <img
+                            src="{% static 'images/bag.png' %}"
+                            alt="Bag"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            👜
+                        </div>
+
+
+                    {% elif item.product.name == "Water Bottle" %}
+
+                        <img
+                            src="{% static 'images/bottle.png' %}"
+                            alt="Water Bottle"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            🥤
+                        </div>
+
+
+                    {% elif item.product.name == "Bottle" %}
+
+                        <img
+                            src="{% static 'images/bottle.png' %}"
+                            alt="Bottle"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            🍼
+                        </div>
+
+
+                    {% elif item.product.name == "Smartphone" %}
+
+                        <img
+                            src="{% static 'images/phone.png' %}"
+                            alt="Smartphone"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            📱
+                        </div>
+
+
+                    {% elif item.product.name == "Phone" %}
+
+                        <img
+                            src="{% static 'images/phone.png' %}"
+                            alt="Phone"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            📱
+                        </div>
+
+
+                    {% elif item.product.name == "Smart Watch" %}
+
+                        <img
+                            src="{% static 'images/watch.png' %}"
+                            alt="Smart Watch"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            ⌚
+                        </div>
+
+
+                    {% elif item.product.name == "Watch" %}
+
+                        <img
+                            src="{% static 'images/watch.png' %}"
+                            alt="Watch"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                        >
+
+                        <div
+                            class="cart-product-icon"
+                            style="display:none;"
+                        >
+                            ⌚
+                        </div>
+
+
+                    {% elif item.product.name == "Headphones" %}
+
+                        <div class="cart-product-icon">
+                            🎧
+                        </div>
+
+
+                    {% elif item.product.name == "Sports Shoes" %}
+
+                        <div class="cart-product-icon">
+                            👟
+                        </div>
+
+
+                    {% elif item.product.name == "Hand Bag" %}
+
+                        <div class="cart-product-icon">
+                            👜
+                        </div>
+
+
+                    {% elif item.product.name == "Laptop" %}
+
+                        <div class="cart-product-icon">
+                            💻
+                        </div>
+
+
+                    {% elif item.product.name == "Cricket Bat" %}
+
+                        <div class="cart-product-icon">
+                            🏏
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="cart-product-icon">
+                            🛍️
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PRODUCT DETAILS -->
+
+                <div class="cart-product-details">
+
+                    <h3>
+                        {{ item.product.name }}
+                    </h3>
+
+                    <div class="cart-product-category">
+
+                        {{ item.product.category }}
+
+                    </div>
+
+                    <div class="cart-product-price">
+
+                        ₹{{ item.product.price }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div>
+
+                    <div class="quantity-title">
+                        Quantity
+                    </div>
+
+                    <div class="quantity-box">
+
+                        <a
+                            href="{% url 'decrease_cart' item.product.id %}"
+                            title="Decrease quantity"
+                        >
+                            −
+                        </a>
+
+                        <span class="quantity-number">
+
+                            {{ item.quantity }}
+
+                        </span>
+
+                        <a
+                            href="{% url 'increase_cart' item.product.id %}"
+                            title="Increase quantity"
+                        >
+                            +
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBTOTAL -->
+
+                <div>
+
+                    <div class="subtotal-title">
+                        Subtotal
+                    </div>
+
+                    <div class="subtotal-price">
+
+                        ₹{{ item.subtotal }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- REMOVE -->
+
+                <div>
+
+                    <a
+                        href="{% url 'remove_cart' item.product.id %}"
+                        class="remove-btn"
+                    >
+                        🗑 Remove
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+            <!-- CONTINUE SHOPPING -->
+
+            <div class="continue-shopping">
+
+                <a href="{% url 'products' %}">
+
+                    ← Continue Shopping
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ========================================================
+             ORDER SUMMARY
+        ======================================================== -->
+
+        <div class="summary-card">
+
+
+            <div class="summary-title">
+
+                <div class="summary-icon">
+                    🧾
+                </div>
+
+                <h2>
+                    Order Summary
+                </h2>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Products
+                </span>
+
+                <strong>
+                    {{ cart_products|length }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    ₹{{ total }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Delivery
+                </span>
+
+                <span class="free-tag">
+                    FREE
+                </span>
+
+            </div>
+
+
+            <div class="total-row">
+
+                <span>
+                    Total Price
+                </span>
+
+                <span class="total-price">
+                    ₹{{ total }}
+                </span>
+
+            </div>
+
+
+            <a
+                href="{% url 'checkout' %}"
+                class="checkout-btn"
+            >
+                → Proceed to Checkout
+            </a>
+
+
+            <!-- SECURE CHECKOUT -->
+
+            <div class="secure-checkout">
+
+                <div class="secure-icon">
+                    🔒
+                </div>
+
+                <h4>
+                    Secure Checkout
+                </h4>
+
+                <p>
+                    Your information is safe with us
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ============================================================
+         EMPTY CART
+    ============================================================ -->
+
+    <div class="empty-cart">
+
+        <div class="empty-cart-icon">
+            🛒
+        </div>
+
+        <h2>
+            Your Cart is Empty
+        </h2>
+
+        <p>
+            You haven't added any products to your cart yet.
+        </p>
+
+        <a
+            href="{% url 'products' %}"
+            class="shop-now-btn"
+        >
+            🛒 Shop Now
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}
